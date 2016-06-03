@@ -7,6 +7,10 @@
 //
 
 import UIKit
+import Photos
+import CoreData
+import CoreImage
+
 
 class ViewController: UIViewController {
 
