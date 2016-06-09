@@ -11,7 +11,7 @@ import Photos
 import CoreData
 import CoreImage
 import Alamofire
-import SwiftyJSON
+
 
 class Login: UIViewController {
     @IBOutlet weak var username: UITextField!
@@ -19,12 +19,9 @@ class Login: UIViewController {
     @IBOutlet weak var ForgotPass: UIButton!
     @IBOutlet weak var Register: UIButton!
 
-    let HttpCLAZ = HTTPRequests()
-
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        
     }
 
     override func didReceiveMemoryWarning() {
@@ -32,6 +29,46 @@ class Login: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    
+    func UserLogIn(){
+        self.performSegueWithIdentifier("dismissLogin", sender: self)
+        self.updateUserLoggedInFlag()
+    }
+    
+    
+    @IBAction func SignIn(sender: UIButton) {
+        if (self.username.text?.characters.count) < 1 && (self.password.text?.characters.count) < 1{
+            self.displayAlertMessage("Error", alertDescription: "Please Enter Login Information")
+        }
+        else{
+            Alamofire.request(.POST, "http://cop4331project.tk/android_api/login.php", parameters: ["email":self.username.text!,"password":self.password.text!]) .responseJSON { response in // 1
+                //print(response.request)  // original URL request
+                //print(response.response) // URL response
+                //print(response.data)     // server data
+                //print(response.result)   // result of response serialization
+                
+                if let jsn = response.result.value {
+                    if let checkpoint = jsn as? [String: AnyObject]{
+                        if let i = checkpoint["error"] as? NSInteger{
+                            if (i == 0){
+                    
+                                self.UserLogIn()
+                            }
+                            else{
+                                self.displayAlertMessage("Error", alertDescription: checkpoint["message"] as! NSString as String)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    func displayAlertMessage(alertTitle:String, alertDescription:String) -> Void {
+        let errorAlert = UIAlertView(title:alertTitle, message:alertDescription, delegate:nil, cancelButtonTitle:"OK")
+        errorAlert.show()
+    }
+
     func updateUserLoggedInFlag() {
         // Update the NSUserDefaults flag
         let defaults = NSUserDefaults.standardUserDefaults()
@@ -55,57 +92,6 @@ class Login: UIViewController {
         })
         
         self.dismissViewControllerAnimated(true, completion: nil)
-    }
-
-    @IBAction func SignIn(sender: AnyObject) {
-        
-        if (self.username.text?.characters.count) < 1 && (self.password.text?.characters.count) < 1{
-            self.displayAlertMessage("Error", alertDescription: "Please Enter Login Information")
-        }
-        else{
-            self.makeSignInRequest(username.text!, userPassword: password.text!)
-            
-        }
-    }
-
-    func displayAlertMessage(alertTitle:String, alertDescription:String) -> Void {
-        let errorAlert = UIAlertView(title:alertTitle, message:alertDescription, delegate:nil, cancelButtonTitle:"OK")
-        errorAlert.show()
-    }
-    
-    func makeSignInRequest(userEmail:String, userPassword:String) {
-        // Create HTTP request and set request Body
-        let httpRequest = HttpCLAZ.buildRequest("login.php", method: "POST", authType: HTTPRequestAuthType.HTTPBasicAuth)
-        
-       // httpRequest.HTTPBody = "{\"email\":\"\(self.username.text)\",\"password\":\"\(encrypted_password)\"}".dataUsingEncoding(NSUTF8StringEncoding);
-        //httpRequest.HTTPBody = ("email="+self.username.text!+"&password=" + encrypted_password!).dataUsingEncoding(NSUTF8StringEncoding)
-        httpRequest.HTTPBody = ("{\"email\":\"\(self.username.text)\",\"password\":\"\(self.password.text)\"}").dataUsingEncoding(NSUTF8StringEncoding)
-        
-        HttpCLAZ.sendRequest(httpRequest, completion: {(data:NSData!, error:NSError!) in
-            // Display error
-            if error != nil {
-                let errorMessage = self.HttpCLAZ.getErrorMessage(error)
-                self.displayAlertMessage("Error", alertDescription: errorMessage as String)
-                
-                return
-            }
-            self.updateUserLoggedInFlag()
-            do
-            {
-            if let responseDict = try NSJSONSerialization.JSONObjectWithData(data,
-                options: NSJSONReadingOptions.AllowFragments) as? NSDictionary {
-            var _ : Bool
-            
-            // save API AuthToken and ExpiryDate in Keychain
-            self.saveApiTokenInKeychain(responseDict)
-            self.performSegueWithIdentifier("dismissLogin", sender: self)
-                }
-            }
-            
-        catch let jsonerror as NSError {
-            print(jsonerror)
-            }
-        })
     }
 }
 

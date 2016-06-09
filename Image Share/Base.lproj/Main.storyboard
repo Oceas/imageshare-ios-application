@@ -163,7 +163,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" enablesReturnKeyAutomatically="YES" secureTextEntry="YES"/>
                             </textField>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Last Name" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="jqK-Q9-lRo">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Phone Number" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="jqK-Q9-lRo" userLabel="phoneNumber">
                                 <rect key="frame" x="-25" y="-30" width="97" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
@@ -302,9 +302,9 @@
                     <connections>
                         <outlet property="Email" destination="T5f-yz-qSw" id="yUU-Mc-kGJ"/>
                         <outlet property="Fname" destination="VKy-l4-hgQ" id="Rvo-ox-4Cj"/>
-                        <outlet property="Lname" destination="jqK-Q9-lRo" id="Bcg-HY-vqV"/>
                         <outlet property="Password" destination="9Ty-ec-leJ" id="J6M-Nj-y0m"/>
                         <outlet property="RPassword" destination="RaA-sy-5YA" id="vSC-fU-5HA"/>
+                        <outlet property="phoneNumber" destination="jqK-Q9-lRo" id="7Mc-QM-z02"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="f0A-ef-wUI" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -358,7 +358,7 @@
                                     </mask>
                                 </variation>
                                 <connections>
-                                    <action selector="SignIn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="YDK-e0-SCk"/>
+                                    <action selector="SignIn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="WPo-mi-0w5"/>
                                 </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="XEa-3t-uas">
@@ -640,7 +640,7 @@
         <!--Menu Main-->
         <scene sceneID="haC-Ta-N6w">
             <objects>
-                <viewController storyboardIdentifier="Welcome" id="d4r-8I-feO" customClass="MenuMain" customModule="Image_Share" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="d4r-8I-feO" customClass="MenuMain" customModule="Image_Share" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Ah6-Kg-de4"/>
                         <viewControllerLayoutGuide type="bottom" id="xm1-dM-ZVl"/>
@@ -753,9 +753,6 @@
                                         <include reference="oMa-oc-bI3"/>
                                     </mask>
                                 </variation>
-                                <connections>
-                                    <action selector="logoutBtnTapped:" destination="d4r-8I-feO" eventType="touchUpInside" id="M5a-ZE-Hv9"/>
-                                </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -845,7 +842,6 @@
                     </view>
                     <connections>
                         <outlet property="Account" destination="bP3-gC-fS4" id="CKy-M8-Zlu"/>
-                        <outlet property="Logout" destination="WRW-ch-fI0" id="I5R-ya-CRY"/>
                         <outlet property="SpaceLeft" destination="dpE-Zs-iTi" id="G3u-hp-duO"/>
                         <outlet property="Upload" destination="yjS-h2-eM9" id="swE-up-b6W"/>
                         <outlet property="ViewPhotos" destination="chW-3n-btA" id="ec3-No-GUe"/>
@@ -1274,8 +1270,8 @@
         <image name="Selected" width="31" height="31"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="34n-vc-895"/>
         <segue reference="Nfo-U7-2sV"/>
+        <segue reference="34n-vc-895"/>
         <segue reference="AmL-Ho-tka"/>
     </inferredMetricsTieBreakers>
 </document>

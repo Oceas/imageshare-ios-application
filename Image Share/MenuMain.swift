@@ -13,15 +13,14 @@ class MenuMain: UIViewController {
     @IBOutlet weak var ViewPhotos: UIButton!
     @IBOutlet weak var Account: UIButton!
     @IBOutlet weak var SpaceLeft: UIProgressView!
-    var shouldFetchNewData = true
-    let httpHelper = HTTPRequests()
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
     }
-    
+    /*
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(true)
         let defaults = NSUserDefaults.standardUserDefaults()
@@ -97,5 +96,5 @@ class MenuMain: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
-
+*/
 }

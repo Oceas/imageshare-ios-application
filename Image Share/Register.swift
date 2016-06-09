@@ -7,11 +7,12 @@
 //
 
 import UIKit
+import Alamofire
 
 class Register: UIViewController {
     
     @IBOutlet weak var Fname: UITextField!
-    @IBOutlet weak var Lname: UITextField!
+    @IBOutlet weak var phoneNumber: UITextField!
     @IBOutlet weak var Email: UITextField!
     @IBOutlet weak var Password: UITextField!
     @IBOutlet weak var RPassword: UITextField!
@@ -31,7 +32,7 @@ class Register: UIViewController {
     }
     
     @IBAction func Create(sender: UIButton) {
-        if Fname.text == "" || Lname.text == "" || Email.text == "" || Password.text == "" || RPassword.text == ""{
+        if Fname.text == "" || phoneNumber.text == "" || Email.text == "" || Password.text == "" || RPassword.text == ""{
             
             let alert = UIAlertController(title: "Invaled Entry", message: "Please Complete All Form Data", preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler:{ (ACTION :UIAlertAction!)in
@@ -52,22 +53,46 @@ class Register: UIViewController {
             
             else{
                 //Send to Server
-                
-                let alert = UIAlertController(title: "Success", message: "Account Created", preferredStyle: UIAlertControllerStyle.Alert)
-                alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler:{ (ACTION :UIAlertAction!)in
-                    print()
-                }))
-                self.presentViewController(alert, animated: true, completion: nil)
-                Fname.text?.removeAll(keepCapacity: false)
-                Lname.text?.removeAll(keepCapacity: false)
-                Email.text?.removeAll(keepCapacity: false)
-                Password.text?.removeAll(keepCapacity: false)
-                RPassword.text?.removeAll(keepCapacity: false)
+                Alamofire.request(.POST, "http://cop4331project.tk/android_api/register.php", parameters: ["name":self.Fname.text!,"email":self.Email.text!,"password":self.Password.text!,"phone_number":self.phoneNumber.text!]) .responseJSON { response in // 1
+                    /*
+                    print(response.request)  // original URL request
+                    print(response.response) // URL response
+                    print(response.data)     // server data
+                    print(response.result)   // result of response serialization
+                    */
+                    if let jsn = response.result.value {
+                        if let content = jsn as? [String:AnyObject]{
+                            if let i = content["error"] as? NSInteger{
+                                if i == 0{
+                                    self.successfull()
+                                }
+                                else{
+                                    let alert = UIAlertController(title: "Error", message: "Something Went Wrong, Please Try Again", preferredStyle: UIAlertControllerStyle.Alert)
+                                    alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler:{ (ACTION :UIAlertAction!)in
+                                        print()
+                                    }))
+                                }
+                            }
+                        }
+                    }
+                }
                 
             }
         }
         
     }
-
+        
+        func successfull(){
+            let alert = UIAlertController(title: "Success", message: "Check Email For Activation Link!", preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler:{ (ACTION :UIAlertAction!)in
+                print()
+            }))
+            self.presentViewController(alert, animated: true, completion: nil)
+            Fname.text?.removeAll(keepCapacity: false)
+            phoneNumber.text?.removeAll(keepCapacity: false)
+            Email.text?.removeAll(keepCapacity: false)
+            Password.text?.removeAll(keepCapacity: false)
+            RPassword.text?.removeAll(keepCapacity: false)
+        }
 
 }
