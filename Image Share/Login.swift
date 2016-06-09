@@ -23,6 +23,9 @@ class Login: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
     }
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(true)
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -31,8 +34,8 @@ class Login: UIViewController {
     
     
     func UserLogIn(){
-        self.performSegueWithIdentifier("dismissLogin", sender: self)
         self.updateUserLoggedInFlag()
+        self.performSegueWithIdentifier("dismissLogin", sender: self)
     }
     
     
@@ -51,7 +54,7 @@ class Login: UIViewController {
                     if let checkpoint = jsn as? [String: AnyObject]{
                         if let i = checkpoint["error"] as? NSInteger{
                             if (i == 0){
-                    
+                                self.saveApiTokenInKeychain(self.password.text!,password:self.password.text!)
                                 self.UserLogIn()
                             }
                             else{
@@ -76,22 +79,9 @@ class Login: UIViewController {
         defaults.synchronize()
     }
     
-    func saveApiTokenInKeychain(tokenDict:NSDictionary) {
-        // Store API AuthToken and AuthToken expiry date in KeyChain
-        tokenDict.enumerateKeysAndObjectsUsingBlock({ (dictKey, dictObj, stopBool) -> Void in
-            let myKey = dictKey as! String
-            let myObj = dictObj as! String
-            
-            if myKey == "api_authtoken" {
-                Keys.setPassword(myObj, account: "Auth_Token", service: "KeyChainService")
-            }
-            
-            if myKey == "authtoken_expiry" {
-                Keys.setPassword(myObj, account: "Auth_Token_Expiry", service: "KeyChainService")
-            }
-        })
-        
-        self.dismissViewControllerAnimated(true, completion: nil)
+    func saveApiTokenInKeychain(username:String,password:String) {
+        // Store Password
+        Keys.setPassword(password, account:username, service: "KeyChainService")
     }
 }
 

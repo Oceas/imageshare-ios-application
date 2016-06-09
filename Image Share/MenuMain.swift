@@ -20,30 +20,14 @@ class MenuMain: UIViewController {
 
         // Do any additional setup after loading the view.
     }
-    /*
+    
     override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(true)
+        //super.viewDidAppear(true)
         let defaults = NSUserDefaults.standardUserDefaults()
+
         
         if defaults.objectForKey("userLoggedIn") == nil {
-            if let loginController = self.storyboard?.instantiateViewControllerWithIdentifier("Login"){
-                self.presentViewController(loginController, animated: true, completion: nil)
-            }
-        }
-        else {
-            // check if API token has expired
-            let dateFormatter = NSDateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-            let userTokenExpiryDate : String? = Keys.passwordForAccount("Auth_Token_Expiry", service: "KeyChainService")
-            let dateFromString : NSDate? = dateFormatter.dateFromString(userTokenExpiryDate!)
-            let now = NSDate()
-            
-            let comparision = now.compare(dateFromString!)
-            
-            // logout and ask user to sign in again if token is expired
-            if comparision != NSComparisonResult.OrderedAscending {
-                self.lgtap()
-            }
+           self.singout()
         }
     }
 
@@ -51,16 +35,14 @@ class MenuMain: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    @IBAction func logoutBtnTapped(sender: UIButton) {
+    @IBAction func Logoutt(sender: UIButton) {
         self.lgtap()
     }
+    
    
     func lgtap(){
         clearLoggedinFlagInUserDefaults()
-        clearAPITokensFromKeyChain()
-        shouldFetchNewData = true
-        self.viewDidAppear(true)
+        self.singout()
     }
 
 
@@ -71,20 +53,10 @@ class MenuMain: UIViewController {
         defaults.synchronize()
     }
     
-    // 3. Clears API Auth token from Keychain
-    func clearAPITokensFromKeyChain () {
-        // clear API Auth Token
-        if let userToken = Keys.passwordForAccount("Auth_Token", service: "KeyChainService") {
-            Keys.deletePasswordForAccount(userToken, account: "Auth_Token", service: "KeyChainService")
-        }
-        
-        // clear API Auth Expiry
-        if let userTokenExpiryDate = Keys.passwordForAccount("Auth_Token_Expiry",
-                                                                       service: "KeyChainService") {
-            Keys.deletePasswordForAccount(userTokenExpiryDate, account: "Auth_Token_Expiry",
-                                                    service: "KeyChainService")
-        }
+    func singout(){
+        self.performSegueWithIdentifier("signingOut", sender: self)
     }
+    
     
 
     /*
@@ -96,5 +68,5 @@ class MenuMain: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
-*/
+
 }

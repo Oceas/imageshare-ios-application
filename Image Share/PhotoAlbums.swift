@@ -16,6 +16,7 @@ class PhotoAlbums{
     var timeStamp:String?
     var Asset:PHAsset?
     var Comments:String?
+    var location:Geo
     
     init (Asset:PHAsset,timeStamp:String, Comments:String) {
         self.Asset = Asset
