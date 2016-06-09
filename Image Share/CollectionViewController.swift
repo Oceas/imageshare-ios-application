@@ -11,26 +11,133 @@ import Photos
 import CoreData
 import CoreImage
 
-class CollectionViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
+class CollectionViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
     var dataPassed:PHAssetCollection?
     var photos:Array<PHAsset> = Array <PHAsset>()
+    var SelectOption:Bool = false
+    var Backbutton:UIBarButtonItem?
+    var Selectbutton:UIBarButtonItem?
+    var Cancelbutton:UIBarButtonItem?
+    var Uploadbutton:UIBarButtonItem?
+    var Updateitems:Array<NSIndexPath> = Array<NSIndexPath>()
+    var popimage:UIImage?
+    let dismissButton:UIButton! = UIButton(type:.Custom)
+    var SelectedPhotos = [PHAsset]()
     
+    var Zoom:NSIndexPath?{
+        didSet{
+            
+            if Zoom != nil {
+                let data = photos[(Zoom?.row)!]
+            
+            let imageRequestOptions = PHImageRequestOptions()
+            imageRequestOptions.networkAccessAllowed = true
+            imageRequestOptions.synchronous = true
+            imageRequestOptions.deliveryMode = .HighQualityFormat
+            imageRequestOptions.resizeMode = .Exact
+            
+            let size = self.view.frame.width
+            let dsize = CGSizeMake(size, self.view.frame.height)
+            
+            PHImageManager.defaultManager().requestImageForAsset(
+                data,
+                targetSize: dsize,
+                contentMode: .AspectFill,
+                options: imageRequestOptions,
+                resultHandler: { (img, info) -> Void in
+                    self.popimage = img
+            })
+
+            view.backgroundColor = UIColor(
+                red: 0.8,
+                green: 0.5,
+                blue: 0.2,
+                alpha: 1.0)
+            //add the image
+            if popimage != nil{
+                let myImageView = UIImageView(image: popimage)
+                myImageView.bounds = self.view.bounds
+                let tapGesture = UITapGestureRecognizer(target: self, action: #selector(CollectionViewController.closePop))
+                myImageView.addGestureRecognizer(tapGesture)
+                myImageView.userInteractionEnabled = true
+                myImageView.tag = 100
+                self.view.addSubview(myImageView)
+            
+                }
+            }
+        }
+    }
+    
+
+
     @IBOutlet weak var Collection: UICollectionView!
+
+    @IBOutlet weak var NavBar: UINavigationItem!
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
         Collection.dataSource = self
         Collection.delegate = self
-
+        Collection.scrollEnabled = true
+        Collection.allowsMultipleSelection = SelectOption
         let fetchOptions = PHFetchOptions()
         let album = PHAsset.fetchAssetsInAssetCollection(dataPassed!, options: fetchOptions)
+        self.NavBar.title = dataPassed?.localizedTitle
+        Backbutton = self.NavBar.leftBarButtonItem
+        Selectbutton = self.NavBar.rightBarButtonItem
+        Uploadbutton = UIBarButtonItem(title: "Upload", style: .Plain, target: self, action: #selector(CollectionViewController.Uploading(_:)))
+        Cancelbutton = UIBarButtonItem(title: "Cancel", style: .Plain, target: self, action: #selector(CollectionViewController.Canceling(_:)))
+        
+        self.NavBar.rightBarButtonItem?.action = #selector(CollectionViewController.Selecting(_:))
+        
         
         for i in 0 ... (album.count - 1){
             photos.append(album.objectAtIndex(i) as! PHAsset)
         }
     }
     
+    /*
+    override func viewDidAppear(animated: Bool) {
+    Collection.reloadData()
+    
+    }
+    */
+    override func viewWillLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+       // Collection.collectionViewLayout.invalidateLayout()
+    }
+    
+    func closePop(){
+        if let viewWithTag = self.view.viewWithTag(100) {
+            viewWithTag.removeFromSuperview()
+            Zoom = nil
+        }
+    }
+    
+    func Uploading(sender: UIBarButtonItem) {
+        
+    }
+    
+    func Canceling(sender: UIBarButtonItem) {
+        SelectOption = false
+        NavBar.leftBarButtonItem = Backbutton
+        NavBar.rightBarButtonItem = Selectbutton
+        Collection.allowsMultipleSelection = SelectOption
+        for indexPath in Collection.indexPathsForSelectedItems()!{
+            self.Collection.deselectItemAtIndexPath(indexPath, animated: false)
+        }
+        Collection.selectItemAtIndexPath(nil, animated: true, scrollPosition: .None)
+        //self.Collection.reloadData()
+    }
+    func Selecting(sender: UIBarButtonItem){
+        SelectOption = true
+        NavBar.leftBarButtonItem = Cancelbutton
+        NavBar.rightBarButtonItem = Uploadbutton
+        Collection.allowsMultipleSelection = SelectOption
+        //self.Collection.reloadData()
+    }
+
     override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
         let orientation: UIInterfaceOrientationMask = [UIInterfaceOrientationMask.Portrait, UIInterfaceOrientationMask.Portrait]
         return orientation
@@ -40,6 +147,7 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
         return true
     }
     
+
     /*
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
         // #warning Incomplete implementation, return the number of sections
@@ -47,19 +155,31 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
     }
     */
     
-    /*
-    func collectionView(collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                               sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        let kWhateverHeightYouWant = 110
-        return CGSizeMake(CGFloat(kWhateverHeightYouWant), CGFloat(kWhateverHeightYouWant))
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+        let picDimension = self.view.frame.size.width/3
+        return CGSizeMake(picDimension, picDimension)
     }
-    */
+    
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
+        return UIEdgeInsetsMake(0, 0, 0, 0)
+    }
+    
+    func collectionView(collectionView: UICollectionView,
+                          layout collectionViewLayout: UICollectionViewLayout,
+                                 minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat{
+        return 0
+    }
+    
+    func collectionView(collectionView: UICollectionView,
+                          layout collectionViewLayout: UICollectionViewLayout,
+                                 minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat{
+        return 0
+    }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return photos.count
     }
-    
+ 
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell2", forIndexPath: indexPath) as! CollectionViewCell
         let data = photos[indexPath.row]
@@ -70,6 +190,7 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
         imageRequestOptions.deliveryMode = .FastFormat
         imageRequestOptions.resizeMode = .Exact
         
+        
         PHImageManager.defaultManager().requestImageForAsset(
             data,
             targetSize: (cell.thumb?.intrinsicContentSize())!,
@@ -78,37 +199,60 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
             resultHandler: { (img, info) -> Void in
                 cell.thumb?.image = img
         })
+        cell.selectedBackgroundView?.addSubview(UIImageView.init(image: UIImage.init(named: "Selected")))
+        //cell.Check.image = UIImage.init(named: "Selected")
 
         return cell
     }
 
     // MARK: UICollectionViewDelegate
-    
-     func collectionView(collectionView: UICollectionView, shouldHighlightItemAtIndexPath indexPath: NSIndexPath) -> Bool {
-     return true
-     }
+ 
 
     
-    /*
+    
      // Uncomment this method to specify if the specified item should be selected
-     override func collectionView(collectionView: UICollectionView, shouldSelectItemAtIndexPath indexPath: NSIndexPath) -> Bool {
-     return true
+    func collectionView(collectionView: UICollectionView, shouldSelectItemAtIndexPath indexPath: NSIndexPath) -> Bool {
+        if SelectOption{
+            return true
+        }
+        if Zoom == indexPath{
+            Zoom = nil
+        }
+        else{
+          Zoom = indexPath
+        }
+        return false
      }
-     */
+    
     
     /*
      // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
      override func collectionView(collectionView: UICollectionView, shouldShowMenuForItemAtIndexPath indexPath: NSIndexPath) -> Bool {
      return false
      }
-     
-     override func collectionView(collectionView: UICollectionView, canPerformAction action: Selector, forItemAtIndexPath indexPath: NSIndexPath, withSender sender: AnyObject?) -> Bool {
-     return false
-     }
-     
-     override func collectionView(collectionView: UICollectionView, performAction action: Selector, forItemAtIndexPath indexPath: NSIndexPath, withSender sender: AnyObject?) {
-     
-     }
-     */
+ */
+
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        if SelectOption {
+            let ph_image = photos[indexPath.row]
+            SelectedPhotos.append(ph_image)
+        }
+        
+    }
+    
+    func collectionView(collectionView: UICollectionView,
+                        didDeselectItemAtIndexPath indexPath: NSIndexPath) {
+        
+        if SelectOption {
+            if let foundIndex = find(SelectedPhotos, rAsset: photos[indexPath.row]) {
+                SelectedPhotos.removeAtIndex(foundIndex)
+            }
+        }
+    }
+    
+    func find(Assets:Array<PHAsset>,rAsset:PHAsset)-> Int?{
+
+      return Assets.indexOf(rAsset)
+    }
 
 }

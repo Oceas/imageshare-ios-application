@@ -15,6 +15,15 @@ import CoreImage
 class CollectionViewCell: UICollectionViewCell {
 
     @IBOutlet weak var thumb: UIImageView!
+    @IBOutlet weak var Check:UIImageView!
     
-    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        self.selected = false
+    }
+    override var selected : Bool {
+        didSet {
+            self.Check.image = selected ? UIImage.init(named: "Selected") : nil
+        }
+    }
 }
