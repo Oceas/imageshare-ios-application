@@ -183,6 +183,7 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell2", forIndexPath: indexPath) as! CollectionViewCell
         let data = photos[indexPath.row]
+    
         
         let imageRequestOptions = PHImageRequestOptions()
         imageRequestOptions.networkAccessAllowed = true
@@ -200,7 +201,6 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
                 cell.thumb?.image = img
         })
         cell.selectedBackgroundView?.addSubview(UIImageView.init(image: UIImage.init(named: "Selected")))
-        //cell.Check.image = UIImage.init(named: "Selected")
 
         return cell
     }

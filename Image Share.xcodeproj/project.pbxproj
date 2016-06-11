@@ -14,13 +14,13 @@
 		E4248A5B1D01E16C000FE19A /* Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4248A5A1D01E16C000FE19A /* Register.swift */; };
 		E4779D491CF9385600EE590A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E4779D471CF9385600EE590A /* Main.storyboard */; };
 		E4779D4F1CF93A1900EE590A /* CollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4779D4E1CF93A1900EE590A /* CollectionViewController.swift */; };
+		E49CCB601D0BA12C006EC0FA /* Photoz.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49CCB5F1D0BA12C006EC0FA /* Photoz.swift */; };
+		E49CCB621D0BC1D2006EC0FA /* KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49CCB611D0BC1D2006EC0FA /* KeychainWrapper.swift */; };
 		E4E006AD1CF8B02100E351C8 /* Amatic-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4E006AA1CF8B02100E351C8 /* Amatic-Bold.ttf */; };
 		E4E006AE1CF8B02100E351C8 /* AmaticSC-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4E006AB1CF8B02100E351C8 /* AmaticSC-Regular.ttf */; };
 		E4E006AF1CF8B02100E351C8 /* SIL Open Font License.txt in Resources */ = {isa = PBXBuildFile; fileRef = E4E006AC1CF8B02100E351C8 /* SIL Open Font License.txt */; };
 		E4E006B11CF8B6D200E351C8 /* TableViewTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E006B01CF8B6D200E351C8 /* TableViewTableViewController.swift */; };
 		E4E006B51CF8B99C00E351C8 /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4E006B41CF8B99C00E351C8 /* TableViewCell.swift */; };
-		E4ED51601D09008C00A849DA /* PhotoAlbums.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4ED515F1D09008C00A849DA /* PhotoAlbums.swift */; };
-		E4ED516C1D09248500A849DA /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4ED516B1D09248500A849DA /* Keys.swift */; };
 		E4FC819C1CFD1746007073B3 /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FC819B1CFD1746007073B3 /* CollectionViewCell.swift */; };
 		E4FDC8DA1CF804260088E49C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FDC8D91CF804260088E49C /* AppDelegate.swift */; };
 		E4FDC8DC1CF804260088E49C /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4FDC8DB1CF804260088E49C /* Login.swift */; };
@@ -44,13 +44,13 @@
 		E4248A5A1D01E16C000FE19A /* Register.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Register.swift; sourceTree = "<group>"; };
 		E4779D481CF9385600EE590A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E4779D4E1CF93A1900EE590A /* CollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewController.swift; sourceTree = "<group>"; };
+		E49CCB5F1D0BA12C006EC0FA /* Photoz.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Photoz.swift; sourceTree = "<group>"; };
+		E49CCB611D0BC1D2006EC0FA /* KeychainWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainWrapper.swift; sourceTree = "<group>"; };
 		E4E006AA1CF8B02100E351C8 /* Amatic-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Amatic-Bold.ttf"; sourceTree = "<group>"; };
 		E4E006AB1CF8B02100E351C8 /* AmaticSC-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "AmaticSC-Regular.ttf"; sourceTree = "<group>"; };
 		E4E006AC1CF8B02100E351C8 /* SIL Open Font License.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "SIL Open Font License.txt"; sourceTree = "<group>"; };
 		E4E006B01CF8B6D200E351C8 /* TableViewTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewTableViewController.swift; sourceTree = "<group>"; };
 		E4E006B41CF8B99C00E351C8 /* TableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
-		E4ED515F1D09008C00A849DA /* PhotoAlbums.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoAlbums.swift; sourceTree = "<group>"; };
-		E4ED516B1D09248500A849DA /* Keys.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		E4FC819B1CFD1746007073B3 /* CollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
 		E4FDC8D61CF804260088E49C /* Image Share.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Image Share.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E4FDC8D91CF804260088E49C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -144,8 +144,8 @@
 				E4248A5A1D01E16C000FE19A /* Register.swift */,
 				E418F2D81D0614DF00E84CB2 /* AccountInfo.swift */,
 				E418F2DA1D06188200E84CB2 /* MenuMain.swift */,
-				E4ED515F1D09008C00A849DA /* PhotoAlbums.swift */,
-				E4ED516B1D09248500A849DA /* Keys.swift */,
+				E49CCB5F1D0BA12C006EC0FA /* Photoz.swift */,
+				E49CCB611D0BC1D2006EC0FA /* KeychainWrapper.swift */,
 			);
 			path = "Image Share";
 			sourceTree = "<group>";
@@ -281,13 +281,13 @@
 				E4FDC8DC1CF804260088E49C /* Login.swift in Sources */,
 				E4248A5B1D01E16C000FE19A /* Register.swift in Sources */,
 				E4248A591D01E13E000FE19A /* ForgotPass.swift in Sources */,
+				E49CCB601D0BA12C006EC0FA /* Photoz.swift in Sources */,
 				E4FC819C1CFD1746007073B3 /* CollectionViewCell.swift in Sources */,
 				E4FDC8DA1CF804260088E49C /* AppDelegate.swift in Sources */,
 				E418F2D91D0614DF00E84CB2 /* AccountInfo.swift in Sources */,
 				E4FDC8E21CF804260088E49C /* Image_Share.xcdatamodeld in Sources */,
 				E4E006B11CF8B6D200E351C8 /* TableViewTableViewController.swift in Sources */,
-				E4ED516C1D09248500A849DA /* Keys.swift in Sources */,
-				E4ED51601D09008C00A849DA /* PhotoAlbums.swift in Sources */,
+				E49CCB621D0BC1D2006EC0FA /* KeychainWrapper.swift in Sources */,
 				E418F2DB1D06188200E84CB2 /* MenuMain.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
