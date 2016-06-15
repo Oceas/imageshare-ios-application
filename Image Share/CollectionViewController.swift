@@ -116,7 +116,14 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
     }
     
     func Uploading(sender: UIBarButtonItem) {
-        
+        performSegueWithIdentifier("toUpload", sender: SelectedPhotos)
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
+        if (segue.identifier == "toUpload") {
+            let svc = segue.destinationViewController as! FinalUpload
+            svc.dataRecieved = self.SelectedPhotos
+        }
     }
     
     func Canceling(sender: UIBarButtonItem) {

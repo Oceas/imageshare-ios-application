@@ -17,9 +17,8 @@ class Photoz: NSObject {
     private var Asset:PHAsset?
     private var Comments:String?
     
-    init (Asset:PHAsset, Comments:String) {
+    init (Asset:PHAsset) {
         self.Asset = Asset
-        self.Comments = Comments
     }
     
     func displayAlertMessage(alertTitle:String, alertDescription:String) -> Void {

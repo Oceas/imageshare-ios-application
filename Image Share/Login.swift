@@ -22,11 +22,12 @@ class Login: UIViewController {
     @IBOutlet weak var Touch: UISwitch!
     var Pass:UITextField?
     var User:UITextField?
+    var Uid:NSString?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        encryption()
         Touch.addTarget(self, action: #selector(Login.TouchSetting), forControlEvents: UIControlEvents.ValueChanged)
+        encryption()
     }
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(true)
@@ -78,6 +79,9 @@ class Login: UIViewController {
         NewUserAlert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler:{
             (data) -> Void in
             self.Touch.on = false
+            let defaults = NSUserDefaults.standardUserDefaults()
+            defaults.setBool(self.Touch.on, forKey: "TouchEnabled")
+            defaults.synchronize()
         }))
         NewUserAlert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler:{
             (data) -> Void in
@@ -116,17 +120,22 @@ class Login: UIViewController {
                 
                 if let jsn = response.result.value {
                     if let checkpoint = jsn as? [String: AnyObject]{
+                        print(checkpoint)
                         if let i = checkpoint["error"] as? NSInteger{
                             if (i == 0){
-                                 if self.Touch.on {
+                                if let ui = checkpoint["uid"] as? NSString{
+                                self.Uid = ui
                                 self.SetUserInfo()
-                                }
                                 self.UserLogIn()
+                                }
                             }
                             else{
                                 self.displayAlertMessage("Error", alertDescription: checkpoint["message"] as! NSString as String)
                                 if self.Touch.on {
                                     self.Touch.on = false
+                                    let defaults = NSUserDefaults.standardUserDefaults()
+                                    defaults.setBool(self.Touch.on, forKey: "TouchEnabled")
+                                    defaults.synchronize()
                                 }
                             }
                         }
@@ -149,6 +158,8 @@ class Login: UIViewController {
     }
     
     func encryption(){
+        let defaults = NSUserDefaults.standardUserDefaults()
+        if(defaults.boolForKey("TouchEnabled")){
         let context = LAContext()
         var error: NSError?
         
@@ -167,16 +178,24 @@ class Login: UIViewController {
                             if error.code == LAError.UserFallback.rawValue {
                                 //FALL BACK IF CANCLED
                                 self.Touch.on = false
+                                let defaults = NSUserDefaults.standardUserDefaults()
+                                defaults.setBool(self.Touch.on, forKey: "TouchEnabled")
+                                defaults.synchronize()
                             }
                         }
-                        self.displayAlertMessage("Authentication failed", alertDescription:"Your fingerprint could not be verified; please try again.")
+                        return
+                        //self.displayAlertMessage("Authentication failed", alertDescription:"Your fingerprint could not be verified; please try again.")
                     }
                 }
             }
         } else {
             self.displayAlertMessage("Touch ID not available", alertDescription:"Your device is not configured for Touch ID.")
             self.Touch.on = false
+            let defaults = NSUserDefaults.standardUserDefaults()
+            defaults.setBool(self.Touch.on, forKey: "TouchEnabled")
+            defaults.synchronize()
             //self.Touch.hidden = true
+        }
         }
     }
     
@@ -192,11 +211,13 @@ class Login: UIViewController {
     func SetUserInfo() {
             KeychainWrapper.setString(self.username.text!, forKey: "username")
             KeychainWrapper.setString(self.password.text!, forKey: "password")
+            KeychainWrapper.setString(self.Uid! as String, forKey: "UserID")
     }
     
     func DeleteUserInfo() {
         KeychainWrapper.removeObjectForKey("username")
         KeychainWrapper.removeObjectForKey("password")
+        KeychainWrapper.removeObjectForKey("UserID")
     }
 
 }
