@@ -116,7 +116,14 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
     }
     
     func Uploading(sender: UIBarButtonItem) {
+        if SelectedPhotos.count == 0 {
+            let alert = UIAlertController(title: "Error", message: "No Photos Selected", preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Cancel, handler:nil))
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
+        else {
         performSegueWithIdentifier("toUpload", sender: SelectedPhotos)
+        }
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {

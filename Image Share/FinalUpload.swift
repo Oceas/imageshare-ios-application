@@ -10,19 +10,21 @@ import Foundation
 import UIKit
 import Photos
 import Alamofire
+import MBProgressHUD
 
-
-class FinalUpload: UIViewController {
+class FinalUpload: UIViewController{
     var PhotosObjects = [Photoz]()
     var dataRecieved = [PHAsset]()
     var i:Int = 0
     var queue:dispatch_queue_t?
+    var progcount:Int = 0
+    var loadingNotification:MBProgressHUD = MBProgressHUD()
+    
     
     @IBOutlet weak var DisplayPhoto: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-          print(dataRecieved.count)
         
         
         let swipeRight = UISwipeGestureRecognizer()
@@ -40,7 +42,6 @@ class FinalUpload: UIViewController {
             PhotosObjects.append(Photoz(Asset: temp))
             }
         }
-        print(PhotosObjects.count)
         DisplayPhoto.image = UIImage(data: (PhotosObjects[i].PJpeg()))
     }
     
@@ -50,31 +51,67 @@ class FinalUpload: UIViewController {
     @IBAction func Back(sender: UIBarButtonItem) {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
+    
     @IBAction func ServerStuff(sender: UIBarButtonItem) {
-         self.queue = dispatch_queue_create("PhotoMover", DISPATCH_QUEUE_CONCURRENT)
-         dispatch_async(self.queue!, {
-        self.FileTransfer()
-        })
+        self.loadingNotification = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
+        self.loadingNotification.mode = MBProgressHUDMode.Determinate
+        self.loadingNotification.labelText = "Uploading"
+        self.loadingNotification.dimBackground = true
+        self.loadingNotification.progress = 0.00
+            dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)) { [unowned self] in
+            for num in 0 ... (self.PhotosObjects.count - 1){
+        self.FileTransfer(self.PhotosObjects[num].PJpeg(),date:num.description)
+            }
+        }
     }
     
-    func FileTransfer(){
-        print("done")
+    func FileTransfer(Photoobject:NSData,date:String){
         if let userID = KeychainWrapper.stringForKey("UserID"){
-            print(userID)
             Alamofire.upload(.POST, "http://cop4331project.tk/android_api/uploadimage.php", multipartFormData:{
                 multipartFormData in
                 multipartFormData.appendBodyPart(data: userID.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name :"userId")
-                //multipartFormData.appendBodyPart(data: self.PhotosObjects[0].PJpeg(), name: "fileToUpload[]")
-                multipartFormData.appendBodyPart(data: self.PhotosObjects[0].PJpeg(), name: "fileToUpload[]",
-                    fileName: "image.jpg", mimeType: "image/jpeg")
+                    multipartFormData.appendBodyPart(data: Photoobject, name: "fileToUpload[]",
+                    fileName: ("\(date).jpg"), mimeType: "image/jpeg")
                 }, encodingCompletion: { encodingResult in
                     switch encodingResult {
                     case .Success(let upload, _, _):
                         upload.responseJSON { response in
-                            debugPrint(response)
+                            //debugPrint(response)
+                            if response.result.isSuccess{
+                            dispatch_async(dispatch_get_main_queue()) { [unowned self] in
+                                self.progcount += 1
+                                self.loadingNotification.progress = (Float(self.progcount)/Float(self.PhotosObjects.count))
+                                if (self.progcount == self.PhotosObjects.count){
+                                MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+                                    self.progcount = 0
+                                    let alert = UIAlertController(title: "Success!", message: "\(self.PhotosObjects.count) Photos Uploaded", preferredStyle: .Alert)
+                                    alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler:{
+                                        (data) -> Void in
+                                        self.performSegueWithIdentifier("UploadComplete", sender: self)
+                                    }))
+                                    self.presentViewController(alert, animated: true, completion:nil)
+                                }
+                            }
                         }
-                    case .Failure(let encodingError):
-                        print(encodingError)
+                            else{
+                                dispatch_async(dispatch_get_main_queue()) { [unowned self] in
+                                    self.loadingNotification.progress = 0.0
+                                    MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+                                    let alert = UIAlertController(title: "Connection Lost!", message: "Error! \(self.progcount) Photos Uploaded", preferredStyle: .Alert)
+                                    alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler:nil))
+                                    self.presentViewController(alert, animated: true, completion:nil)
+                                }
+                            }
+                    }
+                    case .Failure(_)://let encodingError):
+                        //print(encodingError)
+                        dispatch_async(dispatch_get_main_queue()) { [unowned self] in
+                        self.loadingNotification.progress = 0.0
+                        MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+                        let alert = UIAlertController(title: "Connection Lost!", message: "Error! \(self.progcount) Photos Uploaded", preferredStyle: .Alert)
+                        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler:nil))
+                        self.presentViewController(alert, animated: true, completion:nil)
+                        }
                     }
                 }
             )

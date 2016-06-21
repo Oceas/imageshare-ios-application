@@ -1,9 +1,13 @@
 PODS:
   - Alamofire (3.4.0)
+  - BTNavigationDropdownMenu (0.3)
+  - MBProgressHUD (0.9.2)
   - SwiftyJSON (2.3.2)
 
 DEPENDENCIES:
   - Alamofire (~> 3.4)
+  - BTNavigationDropdownMenu
+  - MBProgressHUD (~> 0.9.2)
   - SwiftyJSON (from `https://github.com/SwiftyJSON/SwiftyJSON.git`)
 
 EXTERNAL SOURCES:
@@ -12,13 +16,15 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   SwiftyJSON:
-    :commit: 2a5b70f06001316d4fb54501edc70b4084705da0
+    :commit: 73670b94292b8d8496c398a973f56ac67789ba9f
     :git: https://github.com/SwiftyJSON/SwiftyJSON.git
 
 SPEC CHECKSUMS:
   Alamofire: c19a627cefd6a95f840401c49ab1f124e07f54ee
+  BTNavigationDropdownMenu: c36d20785253699046fdd295698c24b1d1c18f53
+  MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
   SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
 
-PODFILE CHECKSUM: 7cdb0188bb75e34c48f568f358144a42d077d3cd
+PODFILE CHECKSUM: a34e21ad376cefa4580e09c9c5ec3eef6d222e1d
 
 COCOAPODS: 1.0.1
