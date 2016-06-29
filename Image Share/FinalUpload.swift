@@ -66,17 +66,19 @@ class FinalUpload: UIViewController{
     }
     
     func FileTransfer(Photoobject:NSData,date:String){
+        let albumId = "5"
         if let userID = KeychainWrapper.stringForKey("UserID"){
             Alamofire.upload(.POST, "http://cop4331project.tk/android_api/uploadimage.php", multipartFormData:{
                 multipartFormData in
                 multipartFormData.appendBodyPart(data: userID.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name :"userId")
+                multipartFormData.appendBodyPart(data: albumId.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name :"albumId")
                     multipartFormData.appendBodyPart(data: Photoobject, name: "fileToUpload[]",
                     fileName: ("\(date).jpg"), mimeType: "image/jpeg")
                 }, encodingCompletion: { encodingResult in
                     switch encodingResult {
                     case .Success(let upload, _, _):
                         upload.responseJSON { response in
-                            //debugPrint(response)
+                            debugPrint(response)
                             if response.result.isSuccess{
                             dispatch_async(dispatch_get_main_queue()) { [unowned self] in
                                 self.progcount += 1

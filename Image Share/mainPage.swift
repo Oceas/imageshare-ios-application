@@ -12,6 +12,11 @@ import LocalAuthentication
 
 class mainPage: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
     @IBOutlet weak var StoryCollection: UICollectionView!
+    @IBOutlet weak var UserPhoto: UIImageView!
+    @IBOutlet weak var Tags: UILabel!
+    @IBOutlet weak var Name: UILabel!
+    @IBOutlet weak var Description: UITextView!
+    @IBOutlet weak var Searcher: UISearchBar!
 
     var menuView: BTNavigationDropdownMenu!
     override func viewDidLoad() {
@@ -48,8 +53,10 @@ class mainPage: UIViewController, UICollectionViewDelegate, UICollectionViewData
                     return
                 }
             }
-            
             self.navigationItem.titleView = menuView
+        let tap = UITapGestureRecognizer(target: self, action: #selector(mainPage.edit_ProfilePic))
+        self.UserPhoto.addGestureRecognizer(tap)
+        self.UserPhoto.userInteractionEnabled = true
         }
     
     override func viewDidAppear(animated: Bool) {
@@ -58,6 +65,10 @@ class mainPage: UIViewController, UICollectionViewDelegate, UICollectionViewData
         if defaults.objectForKey("userLoggedIn") == nil {
             self.loggingout()
         }
+    }
+    
+    func edit_ProfilePic(){
+        
     }
     
     func loggingout(){
