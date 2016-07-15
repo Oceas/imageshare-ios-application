@@ -197,23 +197,9 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell2", forIndexPath: indexPath) as! CollectionViewCell
         let data = photos[indexPath.row]
-    
         
-        let imageRequestOptions = PHImageRequestOptions()
-        imageRequestOptions.networkAccessAllowed = true
-        imageRequestOptions.synchronous = true
-        imageRequestOptions.deliveryMode = .FastFormat
-        imageRequestOptions.resizeMode = .Exact
-        
-        
-        PHImageManager.defaultManager().requestImageForAsset(
-            data,
-            targetSize: (cell.thumb?.intrinsicContentSize())!,
-            contentMode: .AspectFill,
-            options: imageRequestOptions,
-            resultHandler: { (img, info) -> Void in
-                cell.thumb?.image = img
-        })
+        cell.imageManager = CellManager.sharedManager.imageCache
+        cell.imageAsset = data
         cell.selectedBackgroundView?.addSubview(UIImageView.init(image: UIImage.init(named: "Selected")))
 
         return cell
@@ -267,6 +253,11 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
     func find(Assets:Array<PHAsset>,rAsset:PHAsset)-> Int?{
 
       return Assets.indexOf(rAsset)
+    }
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        let indexPaths = Collection.indexPathsForVisibleItems()
+        CellManager.sharedManager.updateVisibleCells(indexPaths as [NSIndexPath]!,images:self.photos)
     }
 
 }

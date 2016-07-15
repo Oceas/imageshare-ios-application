@@ -471,7 +471,7 @@ class BTTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     
     // Private properties
     private var items: [AnyObject]!
-    private var selectedIndexPath: Int?
+    private var selectedIndexPath: Int!
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -517,7 +517,7 @@ class BTTableView: UITableView, UITableViewDelegate, UITableViewDataSource {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = BTTableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: "Cell", configuration: self.configuration)
         cell.textLabel?.text = self.items[indexPath.row] as? String
-        //cell.checkmarkIcon.hidden = (indexPath.row == selectedIndexPath) ? false : true
+        cell.checkmarkIcon.hidden = (indexPath.row == selectedIndexPath) ? false : true
         if self.configuration.keepSelectedCellColor == true {
             cell.contentView.backgroundColor = (indexPath.row == selectedIndexPath) ? self.configuration.cellSelectionColor : self.configuration.cellBackgroundColor
         }

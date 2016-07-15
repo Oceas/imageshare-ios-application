@@ -8,7 +8,9 @@
 
 import UIKit
 import BTNavigationDropdownMenu
+import Alamofire
 import LocalAuthentication
+import AlamofireImage
 
 class mainPage: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
     @IBOutlet weak var StoryCollection: UICollectionView!
@@ -17,6 +19,17 @@ class mainPage: UIViewController, UICollectionViewDelegate, UICollectionViewData
     @IBOutlet weak var Name: UILabel!
     @IBOutlet weak var Description: UITextView!
     @IBOutlet weak var Searcher: UISearchBar!
+    var AlbumCollection = [NSString]()
+    var cellData = [CellContent]()
+    
+    struct CellContent {
+        var ID:String!
+        var PhotoURL:NSString!
+        init(ID:String,PhotoURL:NSString){
+            self.ID = ID
+            self.PhotoURL = PhotoURL
+        }
+    }
 
     var menuView: BTNavigationDropdownMenu!
     override func viewDidLoad() {
@@ -39,7 +52,6 @@ class mainPage: UIViewController, UICollectionViewDelegate, UICollectionViewData
             menuView.maskBackgroundColor = UIColor.blackColor()
             menuView.maskBackgroundOpacity = 0.3
             menuView.didSelectItemAtIndexHandler = {(indexPath: Int) -> () in
-                print("Did select item at index: \(indexPath)")
                 switch indexPath {
                 case 0:
                     return
@@ -57,6 +69,18 @@ class mainPage: UIViewController, UICollectionViewDelegate, UICollectionViewData
         let tap = UITapGestureRecognizer(target: self, action: #selector(mainPage.edit_ProfilePic))
         self.UserPhoto.addGestureRecognizer(tap)
         self.UserPhoto.userInteractionEnabled = true
+        self.UserInformation(){ namez in
+            self.Name.text = namez
+            
+        }
+        //self.StoryCollection.delegate = self
+        //self.StoryCollection.dataSource = self
+        self.UserAlbums(){_ in
+           //print(self.cellData.count)
+            //self.StoryCollection.reloadData()
+            self.StoryCollection.delegate = self
+            self.StoryCollection.dataSource = self
+            }
         }
     
     override func viewDidAppear(animated: Bool) {
@@ -65,6 +89,7 @@ class mainPage: UIViewController, UICollectionViewDelegate, UICollectionViewData
         if defaults.objectForKey("userLoggedIn") == nil {
             self.loggingout()
         }
+        
     }
     
     func edit_ProfilePic(){
@@ -100,14 +125,127 @@ class mainPage: UIViewController, UICollectionViewDelegate, UICollectionViewData
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 0
+        return self.cellData.count
     }
+    
+    /*
+    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+        
+        StoryCollection.collectionViewLayout.invalidateLayout()
+    }
+*/
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Story", forIndexPath: indexPath) as! StoryCell
         
+        let cells = cellData[indexPath.row]
+
+        
+        
+        cell.configure(cells.PhotoURL as String, cname: cells.ID)
+
         return cell
     }
+    
+    func UserAlbums(completion: (result: String) -> Void){
+        if let USERID = KeychainWrapper.stringForKey("UserID"){
+        Alamofire.request(.POST, "http://imageshare.io/api/getalbums.php", parameters: ["userId":USERID]) .responseJSON { response in
+                if let jsn = response.result.value {
+                    if let returnval = jsn as? [String:AnyObject]{
+                        if let AlbumInfo = returnval["albums"] as? NSArray{
+                            for albums in AlbumInfo{
+                                if let album = albums as? [String:AnyObject]{
+                                    if let albumID = album["albumId"] as? NSString{
+                                        if let albumz_name = album["albumName"] as? String {
+                                        self.albumCover(albumID){(fifth: String) in
+                                            self.populateData(albumz_name, datatwo: fifth)
+                                            if ((AlbumInfo.indexOfObject(albums) + 1) == AlbumInfo.count){
+                                            completion(result: "done")
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    func albumCover(idAlbum:NSString,completion: (result: String) -> Void){
+        if let USERID = KeychainWrapper.stringForKey("UserID"){
+            //for album in self.AlbumCollection{
+            Alamofire.request(.POST, "http://imageshare.io/api/getalbumdetail.php", parameters: ["userId":USERID,"albumId":idAlbum]) .responseJSON { response in // 1
+                if let jsn = response.result.value {
+                        if let first = jsn as? [String:AnyObject]{
+                            if let second = first["album"] as? NSDictionary{
+                               // print(second)
+                                if let third = second["images"] as? NSArray{
+                                    //print(third)
+                                    if let fourth = third.firstObject as? NSDictionary{
+                                        if let fifth = fourth["imageLocation"] as? NSString{
+                                             completion(result: fifth as String)
+                                        }
+                                        
+                                    }
+                                    
+                                }
+                            }
+                        }
+                }
+               // print(self.cellData.count)
+            }
+        //}
 
-
+        }
+    }
+    
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+        let picDimension = self.view.frame.size.width/2
+        return CGSizeMake(picDimension, picDimension)
+    }
+    
+    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
+        return UIEdgeInsetsMake(0, 0, 0, 0)
+    }
+    
+    func collectionView(collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                               minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat{
+        return 0
+    }
+    
+    func collectionView(collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                               minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat{
+        return 0
+    }
+    
+    func populateData(dataone:String,datatwo:NSString){
+    self.cellData.append(CellContent(ID: dataone, PhotoURL: datatwo))
+    }
+    
+    func UserInformation(completion: (nUser: String) -> Void){
+        if let userID = KeychainWrapper.stringForKey("UserID"){
+            Alamofire.request(.POST, "http://imageshare.io/api/getuserinfo.php", parameters: ["userId":userID]) .responseJSON { response in // 1
+                if let jsn = response.result.value {
+                    if let first = jsn as? NSDictionary{
+                        if let second = first["error"] as? Int{
+                            if (second == 0){
+                                if let third = first["user"] as? NSDictionary{
+                                    if let name = third ["name"] as? String {
+                                        completion(nUser: name)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
+

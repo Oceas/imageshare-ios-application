@@ -17,10 +17,21 @@ class CollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var thumb: UIImageView!
     @IBOutlet weak var Check:UIImageView!
     
+    var imageManager: PHImageManager?
+    
+    var imageAsset: PHAsset? {
+        didSet {
+            self.imageManager?.requestImageForAsset(imageAsset!, targetSize: CGSize(width: 125, height: 125), contentMode: .AspectFill, options: nil) { image, info in
+                self.thumb.image = image
+            }
+        }
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         self.selected = false
     }
+    
     override var selected : Bool {
         didSet {
             self.Check.image = selected ? UIImage.init(named: "Selected") : nil

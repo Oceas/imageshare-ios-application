@@ -13,11 +13,17 @@
 		E41986DF1D19D5C400D78E46 /* user-512.png in Resources */ = {isa = PBXBuildFile; fileRef = E41986DE1D19D5C400D78E46 /* user-512.png */; };
 		E4248A591D01E13E000FE19A /* ForgotPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4248A581D01E13E000FE19A /* ForgotPass.swift */; };
 		E4248A5B1D01E16C000FE19A /* Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4248A5A1D01E16C000FE19A /* Register.swift */; };
+		E4286DD81D36C998003CA8AC /* CellManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4286DD71D36C998003CA8AC /* CellManager.swift */; };
+		E4286DDA1D36D308003CA8AC /* DecodeImages.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4286DD91D36D308003CA8AC /* DecodeImages.swift */; };
+		E4286DDC1D36D480003CA8AC /* DecodeUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4286DDB1D36D480003CA8AC /* DecodeUtility.swift */; };
+		E4286DDE1D36D51D003CA8AC /* RequestImages.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4286DDD1D36D51D003CA8AC /* RequestImages.swift */; };
 		E4779D4F1CF93A1900EE590A /* CollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4779D4E1CF93A1900EE590A /* CollectionViewController.swift */; };
 		E47B8EAC1D19A44500CE6149 /* StoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E47B8EAB1D19A44500CE6149 /* StoryCell.swift */; };
 		E49CCB601D0BA12C006EC0FA /* Photoz.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49CCB5F1D0BA12C006EC0FA /* Photoz.swift */; };
 		E49CCB621D0BC1D2006EC0FA /* KeychainWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E49CCB611D0BC1D2006EC0FA /* KeychainWrapper.swift */; };
 		E4BD3E431D0CDAF100CE91E4 /* FinalUpload.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4BD3E421D0CDAF100CE91E4 /* FinalUpload.swift */; };
+		E4C2F3C71D2442A400710A48 /* PopOverTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C2F3C61D2442A400710A48 /* PopOverTableViewController.swift */; };
+		E4C2F3C91D244A0200710A48 /* PopOverTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C2F3C81D244A0200710A48 /* PopOverTableViewCell.swift */; };
 		E4E006AD1CF8B02100E351C8 /* Amatic-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4E006AA1CF8B02100E351C8 /* Amatic-Bold.ttf */; };
 		E4E006AE1CF8B02100E351C8 /* AmaticSC-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4E006AB1CF8B02100E351C8 /* AmaticSC-Regular.ttf */; };
 		E4E006AF1CF8B02100E351C8 /* SIL Open Font License.txt in Resources */ = {isa = PBXBuildFile; fileRef = E4E006AC1CF8B02100E351C8 /* SIL Open Font License.txt */; };
@@ -46,11 +52,17 @@
 		E41986DE1D19D5C400D78E46 /* user-512.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "user-512.png"; sourceTree = "<group>"; };
 		E4248A581D01E13E000FE19A /* ForgotPass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPass.swift; sourceTree = "<group>"; };
 		E4248A5A1D01E16C000FE19A /* Register.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Register.swift; sourceTree = "<group>"; };
+		E4286DD71D36C998003CA8AC /* CellManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellManager.swift; sourceTree = "<group>"; };
+		E4286DD91D36D308003CA8AC /* DecodeImages.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DecodeImages.swift; sourceTree = "<group>"; };
+		E4286DDB1D36D480003CA8AC /* DecodeUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DecodeUtility.swift; sourceTree = "<group>"; };
+		E4286DDD1D36D51D003CA8AC /* RequestImages.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RequestImages.swift; sourceTree = "<group>"; };
 		E4779D4E1CF93A1900EE590A /* CollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewController.swift; sourceTree = "<group>"; };
 		E47B8EAB1D19A44500CE6149 /* StoryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryCell.swift; sourceTree = "<group>"; };
 		E49CCB5F1D0BA12C006EC0FA /* Photoz.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Photoz.swift; sourceTree = "<group>"; };
 		E49CCB611D0BC1D2006EC0FA /* KeychainWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainWrapper.swift; sourceTree = "<group>"; };
 		E4BD3E421D0CDAF100CE91E4 /* FinalUpload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FinalUpload.swift; sourceTree = "<group>"; };
+		E4C2F3C61D2442A400710A48 /* PopOverTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopOverTableViewController.swift; sourceTree = "<group>"; };
+		E4C2F3C81D244A0200710A48 /* PopOverTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopOverTableViewCell.swift; sourceTree = "<group>"; };
 		E4E006AA1CF8B02100E351C8 /* Amatic-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Amatic-Bold.ttf"; sourceTree = "<group>"; };
 		E4E006AB1CF8B02100E351C8 /* AmaticSC-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "AmaticSC-Regular.ttf"; sourceTree = "<group>"; };
 		E4E006AC1CF8B02100E351C8 /* SIL Open Font License.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "SIL Open Font License.txt"; sourceTree = "<group>"; };
@@ -155,6 +167,12 @@
 				E4BD3E421D0CDAF100CE91E4 /* FinalUpload.swift */,
 				E405F48F1D18F25900F644C4 /* mainPage.swift */,
 				E47B8EAB1D19A44500CE6149 /* StoryCell.swift */,
+				E4C2F3C61D2442A400710A48 /* PopOverTableViewController.swift */,
+				E4C2F3C81D244A0200710A48 /* PopOverTableViewCell.swift */,
+				E4286DD71D36C998003CA8AC /* CellManager.swift */,
+				E4286DD91D36D308003CA8AC /* DecodeImages.swift */,
+				E4286DDB1D36D480003CA8AC /* DecodeUtility.swift */,
+				E4286DDD1D36D51D003CA8AC /* RequestImages.swift */,
 			);
 			path = "Image Share";
 			sourceTree = "<group>";
@@ -287,6 +305,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4779D4F1CF93A1900EE590A /* CollectionViewController.swift in Sources */,
+				E4286DD81D36C998003CA8AC /* CellManager.swift in Sources */,
+				E4286DDE1D36D51D003CA8AC /* RequestImages.swift in Sources */,
 				E4E006B51CF8B99C00E351C8 /* TableViewCell.swift in Sources */,
 				E4FDC8DC1CF804260088E49C /* Login.swift in Sources */,
 				E4248A5B1D01E16C000FE19A /* Register.swift in Sources */,
@@ -295,9 +315,13 @@
 				E4FC819C1CFD1746007073B3 /* CollectionViewCell.swift in Sources */,
 				E4BD3E431D0CDAF100CE91E4 /* FinalUpload.swift in Sources */,
 				E4FDC8DA1CF804260088E49C /* AppDelegate.swift in Sources */,
+				E4C2F3C91D244A0200710A48 /* PopOverTableViewCell.swift in Sources */,
 				E418F2D91D0614DF00E84CB2 /* AccountInfo.swift in Sources */,
+				E4C2F3C71D2442A400710A48 /* PopOverTableViewController.swift in Sources */,
 				E405F4901D18F25900F644C4 /* mainPage.swift in Sources */,
+				E4286DDC1D36D480003CA8AC /* DecodeUtility.swift in Sources */,
 				E4FDC8E21CF804260088E49C /* Image_Share.xcdatamodeld in Sources */,
+				E4286DDA1D36D308003CA8AC /* DecodeImages.swift in Sources */,
 				E4E006B11CF8B6D200E351C8 /* TableViewTableViewController.swift in Sources */,
 				E49CCB621D0BC1D2006EC0FA /* KeychainWrapper.swift in Sources */,
 				E47B8EAC1D19A44500CE6149 /* StoryCell.swift in Sources */,

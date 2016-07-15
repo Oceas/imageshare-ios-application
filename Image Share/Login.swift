@@ -100,7 +100,6 @@ class Login: UIViewController {
     
     
     @IBAction func SignIn(sender: UIButton) {
-        //self.encryption()
         self.serverLog()
     }
     
@@ -112,12 +111,7 @@ class Login: UIViewController {
             }
         }
         else{
-            Alamofire.request(.POST, "http://cop4331project.tk/android_api/login.php", parameters: ["email":self.username.text!,"password":self.password.text!]) .responseJSON { response in // 1
-                //print(response.request)  // original URL request
-                //print(response.response) // URL response
-                //print(response.data)     // server data
-                //print(response.result)   // result of response serialization
-                
+            Alamofire.request(.POST, "http://imageshare.io/api/login.php", parameters: ["email":self.username.text!,"password":self.password.text!]) .responseJSON { response in // 1
                 if let jsn = response.result.value {
                     if let checkpoint = jsn as? [String: AnyObject]{
                         print(checkpoint)

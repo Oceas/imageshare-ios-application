@@ -14,10 +14,10 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '2FB453B50EB58B4BCCD5AB7B7DA9D732'
-               BlueprintName = 'SwiftyJSON'
+               BlueprintIdentifier = '228FFC4E78F899B58C33C57F31513A8E'
+               BlueprintName = 'AlamofireNetworkActivityIndicator'
                ReferencedContainer = 'container:Pods.xcodeproj'
-               BuildableName = 'SwiftyJSON.framework'>
+               BuildableName = 'AlamofireNetworkActivityIndicator.framework'>
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>

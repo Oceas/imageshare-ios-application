@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 
 class AccountInfo: UIViewController {
     @IBOutlet weak var Email: UILabel!
@@ -17,7 +18,12 @@ class AccountInfo: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        self.UserInformation(){nUser,eUser,pUser in
+            self.Email.text = eUser
+            self.Username.text = eUser
+            self.StorageCap.text = nUser
+            self.StorageLeft.text = pUser
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -27,7 +33,31 @@ class AccountInfo: UIViewController {
     
     @IBAction func UpdatePassword(sender: AnyObject) {
     }
-
+    
+    func UserInformation(completion: (nUser: String,eUser: String,pUser: String) -> Void){
+        if let userID = KeychainWrapper.stringForKey("UserID"){
+            Alamofire.request(.POST, "http://imageshare.io/api/getuserinfo.php", parameters: ["userId":userID]) .responseJSON { response in // 1
+                if let jsn = response.result.value {
+                    if let first = jsn as? NSDictionary{
+                        if let second = first["error"] as? Int{
+                            if (second == 0){
+                                if let third = first["user"] as? NSDictionary{
+                                    if let name = third ["name"] as? String {
+                                        if let email = third ["email"] as? String {
+                                            if let phone = third ["phone"] as? String {
+                                                completion(nUser: name,eUser: email,pUser: phone)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+            
+                }
+            }
+        }
+    }
     /*
     // MARK: - Navigation
 

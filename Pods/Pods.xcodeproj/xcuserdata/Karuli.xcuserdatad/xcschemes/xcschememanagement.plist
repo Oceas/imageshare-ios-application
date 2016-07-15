@@ -9,6 +9,16 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>AlamofireImage.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>AlamofireNetworkActivityIndicator.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>BTNavigationDropdownMenu.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -32,7 +42,17 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>4F71C6907311AB169F2CFAC34F414EAD</key>
+		<key>05094CC4A047119F7ADC14EE74C4881C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>228FFC4E78F899B58C33C57F31513A8E</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>2FB453B50EB58B4BCCD5AB7B7DA9D732</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -42,12 +62,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E61CE3B6DFA1FE6B3E296965C76C0E10</key>
+		<key>E1834C0D6E3E42BE9A74386339CC44E6</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>EB71CECF0927DA3F675F264E289E14EF</key>
+		<key>E61CE3B6DFA1FE6B3E296965C76C0E10</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -134,7 +134,7 @@ class TableViewTableViewController: UIViewController, UITableViewDelegate, UITab
                 
                 if i == (allAlbums.count - 1) && index == (result.count - 1) {
                     self.TableData.sortInPlace({ (a, b) -> Bool in
-                        return a.Album!.localizedTitle < b.Album!.localizedTitle
+                        return a.Album!.localizedTitle > b.Album!.localizedTitle
                     })
                     self.Table.reloadData()
                 }
