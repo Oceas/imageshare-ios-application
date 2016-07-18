@@ -7,6 +7,7 @@ PODS:
   - BTNavigationDropdownMenu (0.3)
   - FLAnimatedImage (1.0.12)
   - HanekeSwift (0.10.1)
+  - Kingfisher (2.4.1)
   - MBProgressHUD (0.9.2)
   - Nuke (3.1.0)
   - Nuke-Alamofire-Plugin (0.6.0):
@@ -23,6 +24,7 @@ DEPENDENCIES:
   - AlamofireNetworkActivityIndicator (~> 1.0)
   - BTNavigationDropdownMenu
   - HanekeSwift
+  - Kingfisher (~> 2.4)
   - MBProgressHUD (~> 0.9.2)
   - Nuke
   - Nuke-Alamofire-Plugin
@@ -45,12 +47,13 @@ SPEC CHECKSUMS:
   BTNavigationDropdownMenu: c36d20785253699046fdd295698c24b1d1c18f53
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   HanekeSwift: 08e47d3d0f2899ec58e5d257beba0de619aca9e8
+  Kingfisher: 41aed5b6c1ed8fa98cf6d75283ce89cf7890f517
   MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
   Nuke: e93fa6ad10472c2d46ddca3a9dc92fd65027e40e
   Nuke-Alamofire-Plugin: 410bdb98360c586f8ca736e04dbba78fa1294aae
   Nuke-AnimatedImage-Plugin: 5a35f5a38dcd6c9559225de1c80ac7e758bd0ef8
   SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
 
-PODFILE CHECKSUM: be6fe264d8a33b68f78e6e00c1e3642f4d4f2323
+PODFILE CHECKSUM: 22197396c9e7b5af21cdf7e7aa70cb8f930f5dab
 
 COCOAPODS: 1.0.1

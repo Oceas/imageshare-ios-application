@@ -11,6 +11,7 @@ import Alamofire
 import Haneke
 import AlamofireImage
 import AlamofireNetworkActivityIndicator
+import Kingfisher
 
 
 class SlideshowView: UIViewController {
@@ -22,12 +23,6 @@ class SlideshowView: UIViewController {
     @IBOutlet weak var DisplayIMG: UIImageView!
     @IBOutlet weak var PhotoComments: UITextView!
 
-    let imageDownloader = ImageDownloader(
-        configuration: ImageDownloader.defaultURLSessionConfiguration(),
-        downloadPrioritization: .FIFO,
-        maximumActiveDownloads: 4,
-        imageCache: AutoPurgingImageCache()
-    )
 
     
     var PhotoPassed:NSDictionary!
@@ -56,7 +51,7 @@ class SlideshowView: UIViewController {
         DisplayIMG.addGestureRecognizer(swipeLeft)
         DisplayIMG.addGestureRecognizer(taptap)
         DisplayIMG.userInteractionEnabled = true
-        self.DisplayIMG.af_imageDownloader = self.imageDownloader
+        self.DisplayIMG.kf_showIndicatorWhenLoading = true
         
 
        // print(self.PhotoPassed)
@@ -65,13 +60,18 @@ class SlideshowView: UIViewController {
         openDict({ _ in
             //print(self.PhotoDetails)
             self.PhotoTitle.title = self.PhotoDetails[self.i].getName()
-            let PURL = NSURL(string: self.PhotoDetails[self.i].getURL())!
+            var address = [String]()
+            //let PURL = NSURL(string: self.PhotoDetails[self.i].getURL())!
             //self.DisplayIMG.hnk_setImageFromURL(PURL, format: Format<UIImage>(name: "original"))
             for item in self.PhotoDetails{
-            self.setImageWith(NSURLRequest(URL: NSURL(string: item.getURL())!))
+            //self.setImageWith(NSURLRequest(URL: NSURL(string: item.getURL())!))
+                address.append(item.getURL())
             }
-            //self.setImageWith(PURL)
-            self.DisplayIMG.af_setImageWithURL(PURL)
+            self.setImageWith(address)
+            //self.DisplayIMG.af_setImageWithURL(PURL)
+            self.DisplayIMG.kf_setImageWithURL(NSURL(string: self.PhotoDetails[self.i].getURL())!,
+                placeholderImage: nil,
+                optionsInfo: [.Transition(ImageTransition.Fade(1.5))])
             self.PhotoComments.text = self.PhotoDetails[self.i].getDesc()
             
         })
@@ -106,15 +106,22 @@ class SlideshowView: UIViewController {
         self.changePhoto()
     }
     
-    func setImageWith(request:NSURLRequest) {
+    func setImageWith(request:[String]) {
         
+        
+        let urls = request.map { NSURL(string: $0)! }
+        let prefetcher = ImagePrefetcher(urls: urls, optionsInfo: [.Transition(ImageTransition.Fade(1.5))], progressBlock: nil, completionHandler: {
+            (skippedResources, failedResources, completedResources) -> () in
+            //print("These resources are prefetched: \(completedResources)")
+        })
+        prefetcher.start()
         //let URLRequest = NSURLRequest(URL: request)
-
+/*
         self.imageDownloader.downloadImage(URLRequest: request) { response in
             if let image = response.result.value {
                 self.imageDownloader.imageCache?.addImage(image, withIdentifier:request.URLString)
             }
-        }
+        }*/
     }
     
 
@@ -122,8 +129,11 @@ class SlideshowView: UIViewController {
         let NURL = NSURL(string: self.PhotoDetails[self.i].getURL())!
        // self.DisplayIMG.hnk_cancelSetImage()
         //print(self.PhotoDetails[self.i].getName())
-        self.DisplayIMG.image = nil
-        self.DisplayIMG.af_setImageWithURL(NURL, placeholderImage: nil, filter: nil, progress: nil, imageTransition: .CrossDissolve(2), runImageTransitionIfCached: true, completion: nil)
+        //self.DisplayIMG.image = nil
+    
+        self.DisplayIMG.kf_setImageWithURL(NSURL(string: self.PhotoDetails[self.i].getURL())!,
+                                           placeholderImage: nil,
+                                           optionsInfo: [.Transition(ImageTransition.Fade(1.5))])
        // self.DisplayIMG.hnk_setImageFromURL(NURL)
       /*  self.DisplayIMG.af_setImageWithURL(
             NURL,

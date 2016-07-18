@@ -13,6 +13,7 @@ pod 'HanekeSwift'
 pod "Nuke"
 pod "Nuke-Alamofire-Plugin" # optional
 pod "Nuke-AnimatedImage-Plugin" # optional
+pod 'Kingfisher', '~> 2.4'
 
   # Pods for Image Share
 

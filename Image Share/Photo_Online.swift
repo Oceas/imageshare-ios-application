@@ -8,6 +8,7 @@
 
 import UIKit
 import Haneke
+import Kingfisher
 
 class Photo_Online: UITableViewCell {
     @IBOutlet weak var PH_Image: UIImageView!

@@ -10,6 +10,7 @@ import UIKit
 import Alamofire
 import AlamofireImage
 import Haneke
+import Kingfisher
 
 class online_albums: UIViewController,UITableViewDelegate, UITableViewDataSource {
     @IBOutlet weak var NavTitle: UINavigationItem!
@@ -74,7 +75,8 @@ class online_albums: UIViewController,UITableViewDelegate, UITableViewDataSource
         
         let data = self.PClass[indexPath.row]
         let URL = NSURL(string:data.getURL())!
-        cell.PH_Image.hnk_setImageFromURL(URL)
+        cell.PH_Image.kf_setImageWithURL(URL)
+        //cell.PH_Image.hnk_setImageFromURL(URL)
         //cell.PH_Image.af_setImageWithURL(URL)
         return cell
     }

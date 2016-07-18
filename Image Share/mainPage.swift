@@ -11,6 +11,7 @@ import BTNavigationDropdownMenu
 import Alamofire
 import LocalAuthentication
 import Haneke
+import Kingfisher
 
 class mainPage: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
     @IBOutlet weak var StoryCollection: UICollectionView!
@@ -138,7 +139,8 @@ class mainPage: UIViewController, UICollectionViewDelegate, UICollectionViewData
         let URLString = cells.PhotoURL
         let URL = NSURL(string:URLString as String)!
         //cell.coverphoto.hnk_setImageFromURL(URL)
-        cell.coverphoto.hnk_setImageFromURL(URL, format: Format<UIImage>(name: "original"))
+        //cell.coverphoto.hnk_setImageFromURL(URL, format: Format<UIImage>(name: "original"))
+        cell.coverphoto.kf_setImageWithURL(URL)
         cell.caption.text = cells.ID
         
         return cell
