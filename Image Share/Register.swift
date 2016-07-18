@@ -54,23 +54,27 @@ class Register: UIViewController {
             else{
                 //Send to Server
                 Alamofire.request(.POST, "http://imageshare.io/api/register.php", parameters: ["name":self.Fname.text!,"email":self.Email.text!,"password":self.Password.text!,"phone_number":self.phoneNumber.text!]) .responseJSON { response in // 1
-                    /*
-                    print(response.request)  // original URL request
-                    print(response.response) // URL response
-                    print(response.data)     // server data
-                    print(response.result)   // result of response serialization
-                    */
+                    
+                    //print(response.request)  // original URL request
+                    //print(response.response) // URL response
+                    //print(response.data)     // server data
+                    //print(response.result)   // result of response serialization
+ 
                     if let jsn = response.result.value {
-                        if let content = jsn as? [String:AnyObject]{
-                            if let i = content["error"] as? NSInteger{
+                        //print(jsn)
+                        if let content = jsn as? NSDictionary{
+                            if let i = content["error"] as? Int{
                                 if i == 0{
                                     self.successfull()
                                 }
                                 else{
-                                    let alert = UIAlertController(title: "Error", message: "Something Went Wrong, Please Try Again", preferredStyle: UIAlertControllerStyle.Alert)
+                                    if let messages = content["message"] as? String{
+                                    let alert = UIAlertController(title: "Error", message: messages, preferredStyle: UIAlertControllerStyle.Alert)
                                     alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Default, handler:{ (ACTION :UIAlertAction!)in
                                         print()
                                     }))
+                                    self.presentViewController(alert, animated: true, completion: nil)
+                                    }
                                 }
                             }
                         }

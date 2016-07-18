@@ -18,38 +18,12 @@ class CellManager{
     
     static let sharedManager = CellManager()
     
-    let decoder = DecodeUtility()
-    let photoCache = AutoPurgingImageCache(
-        memoryCapacity: 100 * 1024 * 1024,
-        preferredMemoryUsageAfterPurge: 60 * 1024 * 1024
-    )
     private var cachedIndices = NSIndexSet()
     let cachePreheatSize = 1
     var imageCache  = PHCachingImageManager()
     var targetSize = CGSize(width: 125, height: 125)
     var contentMode = PHImageContentMode.AspectFill
     
-    
-    func getNetworkImage(urlString: String, completion: (UIImage -> Void)) -> (RequestImages) {
-        let queue = decoder.queue.underlyingQueue
-        let request = Alamofire.request(.GET, urlString)
-        let imageRequest = RequestImages(request: request)
-        imageRequest.request.response(
-            queue: queue,
-            responseSerializer: Request.imageResponseSerializer(),
-            completionHandler: { response in
-                guard let image = response.result.value else {
-                    return
-                }
-                let decodeOperation = self.decodeImage(image) { image in
-                    completion(image)
-                    self.cacheImage(image, urlString: urlString)
-                }
-                imageRequest.decodeOperation = decodeOperation
-            }
-        )
-        return imageRequest
-    }
     
     func updateVisibleCells(visibleCells: [NSIndexPath],images: [PHAsset]) {
         let updatedCache = NSMutableIndexSet()
@@ -80,19 +54,5 @@ class CellManager{
         }
         cachedIndices = NSIndexSet(indexSet: updatedCache)
     }
-    
-    
-    func decodeImage(image: UIImage, completion: (UIImage -> Void)) -> DecodeOperation {
-        let decodeOperation = DecodeOperation(image: image, decoder: self.decoder, completion: completion)
-        self.decoder.queue.addOperation(decodeOperation)
-        return decodeOperation
-    }
-    
-    func cacheImage(image: Image, urlString: String) {
-        photoCache.addImage(image, withIdentifier: urlString)
-    }
-    
-    func cachedImage(urlString: String) -> Image? {
-        return photoCache.imageWithIdentifier(urlString)
-    }
+
 }

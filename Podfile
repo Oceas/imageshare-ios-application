@@ -9,6 +9,10 @@ pod 'MBProgressHUD', '~> 0.9.2'
 pod 'BTNavigationDropdownMenu'
 pod 'AlamofireImage', '~> 2.0'
 pod 'AlamofireNetworkActivityIndicator', '~> 1.0'
+pod 'HanekeSwift'
+pod "Nuke"
+pod "Nuke-Alamofire-Plugin" # optional
+pod "Nuke-AnimatedImage-Plugin" # optional
 
   # Pods for Image Share
 

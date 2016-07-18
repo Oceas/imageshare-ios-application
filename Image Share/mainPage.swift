@@ -10,7 +10,7 @@ import UIKit
 import BTNavigationDropdownMenu
 import Alamofire
 import LocalAuthentication
-import AlamofireImage
+import Haneke
 
 class mainPage: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
     @IBOutlet weak var StoryCollection: UICollectionView!
@@ -25,9 +25,11 @@ class mainPage: UIViewController, UICollectionViewDelegate, UICollectionViewData
     struct CellContent {
         var ID:String!
         var PhotoURL:NSString!
-        init(ID:String,PhotoURL:NSString){
+        var ActualID:String!
+        init(ID:String,PhotoURL:NSString,ActualID:String){
             self.ID = ID
             self.PhotoURL = PhotoURL
+            self.ActualID = ActualID
         }
     }
 
@@ -73,13 +75,12 @@ class mainPage: UIViewController, UICollectionViewDelegate, UICollectionViewData
             self.Name.text = namez
             
         }
+        self.StoryCollection.delegate = self
+        self.StoryCollection.dataSource = self
         //self.StoryCollection.delegate = self
         //self.StoryCollection.dataSource = self
         self.UserAlbums(){_ in
-           //print(self.cellData.count)
-            //self.StoryCollection.reloadData()
-            self.StoryCollection.delegate = self
-            self.StoryCollection.dataSource = self
+            self.StoryCollection.reloadData()
             }
         }
     
@@ -128,23 +129,18 @@ class mainPage: UIViewController, UICollectionViewDelegate, UICollectionViewData
         return self.cellData.count
     }
     
-    /*
-    override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
-        
-        StoryCollection.collectionViewLayout.invalidateLayout()
-    }
-*/
+
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Story", forIndexPath: indexPath) as! StoryCell
         
         let cells = cellData[indexPath.row]
-
+        let URLString = cells.PhotoURL
+        let URL = NSURL(string:URLString as String)!
+        //cell.coverphoto.hnk_setImageFromURL(URL)
+        cell.coverphoto.hnk_setImageFromURL(URL, format: Format<UIImage>(name: "original"))
+        cell.caption.text = cells.ID
         
-        
-        cell.configure(cells.PhotoURL as String, cname: cells.ID)
-
         return cell
     }
     
@@ -159,7 +155,7 @@ class mainPage: UIViewController, UICollectionViewDelegate, UICollectionViewData
                                     if let albumID = album["albumId"] as? NSString{
                                         if let albumz_name = album["albumName"] as? String {
                                         self.albumCover(albumID){(fifth: String) in
-                                            self.populateData(albumz_name, datatwo: fifth)
+                                            self.populateData(albumz_name, datatwo: fifth,datathree: albumID as String)
                                             if ((AlbumInfo.indexOfObject(albums) + 1) == AlbumInfo.count){
                                             completion(result: "done")
                                                 }
@@ -202,6 +198,19 @@ class mainPage: UIViewController, UICollectionViewDelegate, UICollectionViewData
 
         }
     }
+
+     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        performSegueWithIdentifier("PhotoAlbum", sender: cellData[indexPath.row].ActualID)
+    }
+    
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
+        if (segue.identifier == "PhotoAlbum") {
+            let svc = segue.destinationViewController as! online_albums
+            svc.DataPassed = sender as! String
+        }
+    }
+
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
         let picDimension = self.view.frame.size.width/2
@@ -224,8 +233,8 @@ class mainPage: UIViewController, UICollectionViewDelegate, UICollectionViewData
         return 0
     }
     
-    func populateData(dataone:String,datatwo:NSString){
-    self.cellData.append(CellContent(ID: dataone, PhotoURL: datatwo))
+    func populateData(dataone:String,datatwo:NSString,datathree:String){
+    self.cellData.append(CellContent(ID: dataone, PhotoURL: datatwo,ActualID: datathree))
     }
     
     func UserInformation(completion: (nUser: String) -> Void){

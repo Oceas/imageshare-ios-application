@@ -10,58 +10,40 @@ import Alamofire
 import AlamofireImage
 import Foundation
 import UIKit
+import Haneke
 
 class StoryCell: UICollectionViewCell {
-    @IBOutlet weak var coverphoto: UIImageView!
+    var coverphoto: UIImageView!
+    var caption:UILabel!
     
-    @IBOutlet weak var Album_Name: UILabel!
-    @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
-    
-    var photoURL:String!
-    var photoname:String!
-    var request: RequestImages?
-    
-    
-    func configure(photoURL:String, cname:String) {
-        self.photoURL = photoURL
-        self.photoname = cname
-        self.reset()
-        self.loadImage()
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        initHelper()
     }
     
-    func reset() {
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        initHelper()
+    }
+    
+    func initHelper() {
+        coverphoto = UIImageView(frame: self.contentView.bounds)
+        coverphoto.clipsToBounds = true
+        coverphoto.contentMode = .ScaleAspectFill
+        coverphoto.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
+        caption = UILabel(frame: CGRect(x: CGFloat(20), y: CGFloat(150), width: CGFloat(200), height: self.contentView.bounds.height/3))
+        caption.clipsToBounds = true
+        caption.contentMode = .ScaleToFill
+        caption.textColor = UIColor.whiteColor()
+        self.contentView.addSubview(coverphoto)
+        self.contentView.addSubview(caption)
+    }
+    
+    override func prepareForReuse() {
+        coverphoto.hnk_cancelSetImage()
         coverphoto.image = nil
-        request?.cancel()
-        Album_Name.hidden = true
+        caption.text?.removeAll(keepCapacity: false)
     }
-    
-    func loadImage() {
-        if let image = CellManager.sharedManager.cachedImage(photoURL!) {
-            if let thumb = UIImageJPEGRepresentation(image, 0.5){
-            populateCell(UIImage(data: thumb)!)
-            return
-            }
-        }
-        self.downloadImage()
-    }
-    
-    func downloadImage() {
-        loadingIndicator.startAnimating()
-        let urlString = photoURL
-        request = CellManager.sharedManager.getNetworkImage(urlString) { image in
-            if let thumb = UIImageJPEGRepresentation(image, 0.5){
-            self.populateCell(UIImage(data: thumb)!)
-            }
-        }
-    }
-    
-    func populateCell(image: UIImage) {
-        loadingIndicator.stopAnimating()
-        coverphoto.image = image
-        Album_Name.text = self.photoname
-        Album_Name.hidden = false
-    }
-    
 
     
 }

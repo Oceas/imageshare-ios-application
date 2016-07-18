@@ -24,7 +24,32 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>FLAnimatedImage.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>HanekeSwift.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>MBProgressHUD.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Nuke-Alamofire-Plugin.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Nuke-AnimatedImage-Plugin.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Nuke.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -47,12 +72,22 @@
 			<key>primary</key>
 			<true/>
 		</dict>
+		<key>0D7CBAE035ACDF6DFE9213388A507376</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>228FFC4E78F899B58C33C57F31513A8E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>2FB453B50EB58B4BCCD5AB7B7DA9D732</key>
+		<key>2C2B1953A91633859BF7AD238FF567A0</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>37D90A348C88BF4C70BC346D2C171DE2</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -62,7 +97,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>E1834C0D6E3E42BE9A74386339CC44E6</key>
+		<key>8F21E8D0CF87BE5407DBB09F1AC3D43F</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>C2ED0A458D3A0181CD3FFFBADC2B4ED9</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E3B1735424FC6E1C756AF6F5019D25CD</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -73,6 +118,11 @@
 			<true/>
 		</dict>
 		<key>FD23F1DA220A44C7E84F356B64871271</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>FE113CEF81C16AA59EC049ACE130BCB2</key>
 		<dict>
 			<key>primary</key>
 			<true/>
