@@ -9,11 +9,6 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>AlamofireImage.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>AlamofireNetworkActivityIndicator.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -24,7 +19,7 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>FLAnimatedImage.xcscheme</key>
+		<key>Eureka.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -44,27 +39,7 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Nuke-Alamofire-Plugin.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>Nuke-AnimatedImage-Plugin.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>Nuke.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>Pods-Image Share.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>SwiftyJSON.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -72,11 +47,6 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>05094CC4A047119F7ADC14EE74C4881C</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>228FFC4E78F899B58C33C57F31513A8E</key>
 		<dict>
 			<key>primary</key>
@@ -87,7 +57,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>37D90A348C88BF4C70BC346D2C171DE2</key>
+		<key>55E05149B05251EEB2DE32597129141A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -97,17 +67,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>8F21E8D0CF87BE5407DBB09F1AC3D43F</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>C9BDDD141D43248FD235E41070BA9983</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>E3B1735424FC6E1C756AF6F5019D25CD</key>
+		<key>7E82EF3158DC7672612EFE46DB8E4C8F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -122,17 +82,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>EDB8FC6E4D559CDAD9EC76C41ADE3190</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
 		<key>FD23F1DA220A44C7E84F356B64871271</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>FE113CEF81C16AA59EC049ACE130BCB2</key>
 		<dict>
 			<key>primary</key>
 			<true/>

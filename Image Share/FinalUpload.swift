@@ -12,7 +12,7 @@ import Photos
 import Alamofire
 import MBProgressHUD
 
-class FinalUpload: UIViewController, PopOverTableViewControllerDelegate, UIPopoverPresentationControllerDelegate{
+class FinalUpload: UIViewController, selectAlbumDelegate, UIPopoverPresentationControllerDelegate{
     var PhotosObjects = [Photoz]()
     var dataRecieved = [PHAsset]()
     var photoData = [NSData]()
@@ -21,14 +21,19 @@ class FinalUpload: UIViewController, PopOverTableViewControllerDelegate, UIPopov
     var progcount:Int = 0
     var loadingNotification:MBProgressHUD = MBProgressHUD()
     var AlbumRecieved:NSString?
+    var request: Alamofire.Request?
     
+    @IBOutlet weak var Captions: UITextView!
     
     @IBOutlet weak var DisplayPhoto: UIImageView!
     
+    var imageOrientation:UIImageOrientation?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
+        //self.imageOrientation=DisplayPhoto.image?.imageOrientation
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Upload", style: .Plain  , target: self, action: #selector (FinalUpload.UploadComplete(_:)))
+        self.Captions.hidden=true
         let swipeRight = UISwipeGestureRecognizer()
         swipeRight.direction = UISwipeGestureRecognizerDirection.Right
         swipeRight.addTarget(self, action: #selector (FinalUpload.Swipe_Right))
@@ -45,88 +50,61 @@ class FinalUpload: UIViewController, PopOverTableViewControllerDelegate, UIPopov
             self.photoData.append(PhotosObjects[z].PJpeg())
             }
         }
-        DisplayPhoto.image = UIImage(data: (PhotosObjects[i].PJpeg()))
+        //DisplayPhoto.
+        DisplayPhoto.image=UIImage(data: (PhotosObjects[i].PJpeg()))?.kf_normalizedImage()
+        //DisplayPhoto.image?.kf_normalizedImage() //= UIImage(data: (PhotosObjects[i].PJpeg()))
+        if let cap = self.PhotosObjects[i].Comments{
+            self.Captions.text = cap
+        }else{
+            self.Captions.text = "Enter Caption!"
+        }
     }
-    
+    /*
+    func correctlyOrientedImage() -> UIImage {
+        if self.imageOrientation == UIImageOrientation.Up {
+            return self
+        }
+        
+        UIGraphicsBeginImageContextWithOptions(self.size, false, self.scale)
+        self.drawInRect(CGRectMake(0, 0, self.size.width, self.size.height))
+        var normalizedImage:UIImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        return normalizedImage;
+    }
+    */
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(true)
     }
-    @IBAction func Back(sender: UIBarButtonItem) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+    
+    @IBAction func AddCaption(sender: AnyObject) {
+        self.Captions.hidden = !self.Captions.hidden.boolValue
     }
     
-    @IBAction func ServerStuff(sender: UIBarButtonItem) {
-        self.performSegueWithIdentifier("PopTable", sender: self)
-        /*
-        self.loadingNotification = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
-        self.loadingNotification.mode = MBProgressHUDMode.Determinate
-        self.loadingNotification.labelText = "Uploading"
-        self.loadingNotification.dimBackground = true
-        self.loadingNotification.progress = 0.00
-            dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)) { [unowned self] in
-            for num in 0 ... (self.PhotosObjects.count - 1){
-        self.FileTransfer(self.PhotosObjects[num].PJpeg(),date:num.description)
+    func UploadComplete(sender:UIBarButtonItem){
+        if let cap = self.PhotosObjects[i].Comments{
+            if (self.Captions.text != cap){
+                self.PhotosObjects[i].Comments = self.Captions.text
             }
-        }*/
+        }
+        else{
+            self.PhotosObjects[i].Comments = self.Captions.text
+        }
+        self.performSegueWithIdentifier("PopTable", sender: sender)
     }
     
-    func FileTransfer(Photoobject:NSData,date:String,albumId:String){
-        if let userID = KeychainWrapper.stringForKey("UserID"){
-            print(date, albumId, userID)
-            Alamofire.upload(.POST, "http://imageshare.io/api/uploadimage.php", multipartFormData:{
-                multipartFormData in
-                    multipartFormData.appendBodyPart(data: userID.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name :"userId")
-                    multipartFormData.appendBodyPart(data: albumId.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name :"albumId")
-                    multipartFormData.appendBodyPart(data:Photoobject, name: "fileToUpload[]",
-                    fileName: ("\(date).jpg"), mimeType: "image/jpeg")
+    
 
-                }, encodingCompletion: { encodingResult in
-                    switch encodingResult {
-                    case .Success(let upload, _, _):
-                        upload.responseJSON { response in
-                            debugPrint(response)
-                            if response.result.isSuccess{
-                            dispatch_async(dispatch_get_main_queue()) { [unowned self] in
-                                self.progcount += 1
-                                self.loadingNotification.progress = (Float(self.progcount)/Float(self.PhotosObjects.count))
-                                if (self.progcount == (self.PhotosObjects.count - 1)){
-                                MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
-                                    self.progcount = 0
-                                    let alert = UIAlertController(title: "Success!", message: "\(self.PhotosObjects.count) Photos Uploaded", preferredStyle: .Alert)
-                                    alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler:{
-                                        (data) -> Void in
-                                        self.performSegueWithIdentifier("UploadComplete", sender: self)
-                                    }))
-                                    self.presentViewController(alert, animated: true, completion:nil)
-                                }
-                            }
-                        }
-                            else{
-                                dispatch_async(dispatch_get_main_queue()) { [unowned self] in
-                                    self.loadingNotification.progress = 0.0
-                                    MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
-                                    let alert = UIAlertController(title: "Connection Lost!", message: "Error! \(self.progcount) Photos Uploaded", preferredStyle: .Alert)
-                                    alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler:nil))
-                                    self.presentViewController(alert, animated: true, completion:nil)
-                                }
-                            }
-                    }
-                    case .Failure(_)://let encodingError):
-                        //print(encodingError)
-                        dispatch_async(dispatch_get_main_queue()) { [unowned self] in
-                        self.loadingNotification.progress = 0.0
-                        MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
-                        let alert = UIAlertController(title: "Connection Lost!", message: "Error! \(self.progcount) Photos Uploaded", preferredStyle: .Alert)
-                        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler:nil))
-                        self.presentViewController(alert, animated: true, completion:nil)
-                        }
-                    }
-                }
-            )
-        }
-    }
     
     func Swipe_Right(){
+        if let cap = self.PhotosObjects[i].Comments{
+            if (self.Captions.text != cap){
+                self.PhotosObjects[i].Comments = self.Captions.text
+            }
+        }
+        else{
+            self.PhotosObjects[i].Comments = self.Captions.text
+        }
         if (self.i + 1) <= (PhotosObjects.count-1){
             self.i += 1
         }
@@ -137,6 +115,14 @@ class FinalUpload: UIViewController, PopOverTableViewControllerDelegate, UIPopov
     }
     
     func Swipe_Left(){
+        if let cap = self.PhotosObjects[i].Comments{
+            if (self.Captions.text != cap){
+                self.PhotosObjects[i].Comments = self.Captions.text
+            }
+        }
+        else{
+            self.PhotosObjects[i].Comments = self.Captions.text
+        }
         if (self.i - 1) >= 0{
             self.i -= 1
         }
@@ -148,13 +134,18 @@ class FinalUpload: UIViewController, PopOverTableViewControllerDelegate, UIPopov
     
     func changePhoto(){
         DisplayPhoto.image = UIImage(data: (PhotosObjects[i].PJpeg()))
+        if let cap = self.PhotosObjects[i].Comments{
+            self.Captions.text = cap
+        }else{
+            self.Captions.text = "Enter Caption!"
+        }
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?)
     {
         if segue.identifier == "PopTable"
         {
-            let vc = segue.destinationViewController as! PopOverTableViewController
+            let vc = segue.destinationViewController as! selectAlbum
             vc.delegate = self
             
             let controller = vc.popoverPresentationController
@@ -167,11 +158,15 @@ class FinalUpload: UIViewController, PopOverTableViewControllerDelegate, UIPopov
     }
     
     func saveText(strText:NSString){
+        print(strText)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(FinalUpload.cancelupload))
         self.loadingNotification = MBProgressHUD.showHUDAddedTo(self.view, animated: true)
         self.loadingNotification.mode = MBProgressHUDMode.Determinate
         self.loadingNotification.labelText = "Uploading"
+        self.loadingNotification.detailsLabelText = "Tap to Cancel"
         self.loadingNotification.dimBackground = true
         self.loadingNotification.progress = 0.00
+        self.loadingNotification.addGestureRecognizer(tapGesture)
         self.newUpload(strText as String)
         /*
          dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)){ [unowned self] in
@@ -182,6 +177,15 @@ class FinalUpload: UIViewController, PopOverTableViewControllerDelegate, UIPopov
  */
         }
 
+    func cancelupload(){
+        self.request?.cancel()
+        self.loadingNotification.progress = 0
+        MBProgressHUD.hideAllHUDsForView(self.view, animated: true)
+        let alert = UIAlertController(title: "Upload Stopped", message: "User Stopped Upload", preferredStyle: .Alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler:nil))
+        self.presentViewController(alert, animated: true, completion:nil)
+    }
+    
     func adaptivePresentationStyleForPresentationController(controller: UIPresentationController) -> UIModalPresentationStyle {
         return .None
     }
@@ -196,7 +200,7 @@ class FinalUpload: UIViewController, PopOverTableViewControllerDelegate, UIPopov
     
     func newUpload(albumId:String){
         if let userID = KeychainWrapper.stringForKey("UserID"){
-            Alamofire.upload(.POST, "http://imageshare.io/api/uploadimage.php", multipartFormData:{
+             Alamofire.upload(.POST, "http://imageshare.io/api/v1/uploadimage.php", multipartFormData:{
                 multipartFormData in
                 multipartFormData.appendBodyPart(data: userID.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name :"userId")
                 multipartFormData.appendBodyPart(data: albumId.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name :"albumId")
@@ -213,6 +217,7 @@ class FinalUpload: UIViewController, PopOverTableViewControllerDelegate, UIPopov
                     switch encodingResult {
                     case .Success(let upload, _, _):
                         upload.validate()
+                    self.request = upload
                         upload.progress({bytesWritten, totalBytesWritten, totalBytesExpectedToWrite in
                             self.loadingNotification.progress = (Float(totalBytesWritten)/Float(totalBytesExpectedToWrite))
                             if (totalBytesWritten == totalBytesExpectedToWrite){

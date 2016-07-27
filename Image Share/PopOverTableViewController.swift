@@ -9,6 +9,7 @@
 import UIKit
 import Alamofire
 import LocalAuthentication
+import Eureka
 
 protocol PopOverTableViewControllerDelegate
 {
@@ -110,7 +111,7 @@ class PopOverTableViewController: UITableViewController {
     
     func CreateAlbumAPI(){
         if let userID = KeychainWrapper.stringForKey("UserID"){
-            Alamofire.request(.POST, "http://imageshare.io/api/createalbum.php", parameters: ["userId":userID,"albumName":self.sAlbumName!,"albumDesc":self.sAlbumDesc!]) .responseJSON { response in // 1
+            Alamofire.request(.POST, "http://imageshare.io/api/v1/createalbum.php", parameters: ["userId":userID,"albumName":self.sAlbumName!,"albumDesc":self.sAlbumDesc!]) .responseJSON { response in // 1
             if let jsn = response.result.value {
                 print(jsn)
                if let albuminfo = jsn as? NSDictionary{
@@ -134,7 +135,7 @@ class PopOverTableViewController: UITableViewController {
     
     func GetAllAlbums(completion: (result: String) -> Void){
         if let userID = KeychainWrapper.stringForKey("UserID"){
-        Alamofire.request(.POST, "http://imageshare.io/api/getalbums.php", parameters: ["userId":userID]) .responseJSON { response in
+        Alamofire.request(.POST, "http://imageshare.io/api/v1/getalbums.php", parameters: ["userId":userID]) .responseJSON { response in
                 if let jsn = response.result.value {
                     if let albuminfo = jsn as? [String: AnyObject]{
                         if let suc = albuminfo["error"] as? NSInteger{
@@ -159,6 +160,24 @@ class PopOverTableViewController: UITableViewController {
                             }
                         }
                     }
+                }
+            }
+        }
+    }
+    
+    func createstory(){
+        if let userID = KeychainWrapper.stringForKey("UserID"){
+            Alamofire.request(.POST, "http://imageshare.io/api/v1/createstory.php", parameters: ["userId":userID, "storyName":userID, "storyDesc":userID, "location":userID]) .responseJSON { response in
+                if let jsn = response.result.value {
+                }
+            }
+        }
+    }
+    
+    func getstories(){
+        if let userID = KeychainWrapper.stringForKey("UserID"){
+            Alamofire.request(.POST, "http://imageshare.io/api/v1/getstories.php", parameters: ["userId":userID]) .responseJSON { response in
+                if let jsn = response.result.value {
                 }
             }
         }

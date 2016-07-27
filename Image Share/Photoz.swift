@@ -15,7 +15,7 @@ class Photoz: NSObject {
 
     private var timeStamp:NSDate?
     private var Asset:PHAsset?
-    private var Comments:String?
+    var Comments:String?
     
     init (Asset:PHAsset) {
         self.Asset = Asset

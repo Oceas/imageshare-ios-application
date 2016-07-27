@@ -17,7 +17,7 @@ class AccountInfo: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.navigationItem.title = "Account Info"
         self.UserInformation(){nUser,eUser,pUser in
             self.Email.text = eUser
             self.Username.text = eUser
@@ -36,7 +36,7 @@ class AccountInfo: UIViewController {
     
     func UserInformation(completion: (nUser: String,eUser: String,pUser: String) -> Void){
         if let userID = KeychainWrapper.stringForKey("UserID"){
-            Alamofire.request(.POST, "http://imageshare.io/api/getuserinfo.php", parameters: ["userId":userID]) .responseJSON { response in // 1
+            Alamofire.request(.POST, "http://imageshare.io/api/v1/getuserinfo.php", parameters: ["userId":userID]) .responseJSON { response in // 1
                 if let jsn = response.result.value {
                     if let first = jsn as? NSDictionary{
                         if let second = first["error"] as? Int{

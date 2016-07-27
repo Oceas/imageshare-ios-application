@@ -53,7 +53,7 @@ class Register: UIViewController {
             
             else{
                 //Send to Server
-                Alamofire.request(.POST, "http://imageshare.io/api/register.php", parameters: ["name":self.Fname.text!,"email":self.Email.text!,"password":self.Password.text!,"phone_number":self.phoneNumber.text!]) .responseJSON { response in // 1
+                Alamofire.request(.POST, "http://imageshare.io/api/v1/register.php", parameters: ["name":self.Fname.text!,"email":self.Email.text!,"password":self.Password.text!,"phone_number":self.phoneNumber.text!]) .responseJSON { response in // 1
                     
                     //print(response.request)  // original URL request
                     //print(response.response) // URL response

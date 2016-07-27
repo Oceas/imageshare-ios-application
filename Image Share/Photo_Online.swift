@@ -19,10 +19,16 @@ class Photo_Online: UITableViewCell {
         // Initialization code
     }
 
+    override func prepareForReuse() {
+        PH_Image.kf_cancelDownloadTask()
+        PH_Image.image = nil
+    }
+    
+    /*
     override func setSelected(selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
     }
-
+*/
 }

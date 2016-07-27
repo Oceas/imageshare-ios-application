@@ -16,6 +16,7 @@ import CoreImage
 class TableViewTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource{
     @IBOutlet weak var Table: UITableView!
     
+    
     //Table Array
     var TableData:Array< datastruct > = Array < datastruct >()
     
@@ -44,6 +45,8 @@ class TableViewTableViewController: UIViewController, UITableViewDelegate, UITab
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem()
+        self.navigationItem.title = "Albums"
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Home", style: .Plain, target: self, action: #selector(TableViewTableViewController.gohome(_:)))
         Table.delegate = self
         Table.dataSource = self
         //Table.rowHeight = UITableViewAutomaticDimension
@@ -196,5 +199,8 @@ class TableViewTableViewController: UIViewController, UITableViewDelegate, UITab
         // Pass the selected object to the new view controller.
     }
     */
+    func gohome(sender:UIBarButtonItem){
+        performSegueWithIdentifier("goinghome", sender: sender)
+    }
 
 }

@@ -13,31 +13,29 @@ import LocalAuthentication
 import Haneke
 import Kingfisher
 
-class mainPage: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
+class mainPage: UIViewController{
     @IBOutlet weak var StoryCollection: UICollectionView!
     @IBOutlet weak var UserPhoto: UIImageView!
     @IBOutlet weak var Tags: UILabel!
     @IBOutlet weak var Name: UILabel!
     @IBOutlet weak var Description: UITextView!
-    @IBOutlet weak var Searcher: UISearchBar!
-    var AlbumCollection = [NSString]()
-    var cellData = [CellContent]()
+
     
-    struct CellContent {
-        var ID:String!
-        var PhotoURL:NSString!
-        var ActualID:String!
-        init(ID:String,PhotoURL:NSString,ActualID:String){
-            self.ID = ID
-            self.PhotoURL = PhotoURL
-            self.ActualID = ActualID
-        }
-    }
+    @IBOutlet weak var ContainerItem: UIView!
+    weak var currentViewController: UIViewController?
+
 
     var menuView: BTNavigationDropdownMenu!
     override func viewDidLoad() {
         super.viewDidLoad()
-            let items = ["Home", "Upload", "Account Info", "LogOut", "Top Picks"]
+        self.currentViewController = self.storyboard?.instantiateViewControllerWithIdentifier("Stories")
+        self.currentViewController!.view.translatesAutoresizingMaskIntoConstraints = false
+        self.addChildViewController(self.currentViewController!)
+        self.addSubview(self.currentViewController!.view, toView: self.ContainerItem)
+        self.currentViewController!.view.reloadInputViews()
+        self.currentViewController!.view.setNeedsLayout()
+
+            let items = ["Home", "Upload", "Account Info", "LogOut"]
             self.navigationController?.navigationBar.translucent = false
             self.navigationController?.navigationBar.barTintColor = UIColor(red: 0.0/255.0, green:180/255.0, blue:220/255.0, alpha: 1.0)
             self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
@@ -68,22 +66,17 @@ class mainPage: UIViewController, UICollectionViewDelegate, UICollectionViewData
                     return
                 }
             }
-            self.navigationItem.titleView = menuView
+        self.navigationItem.titleView = menuView
         let tap = UITapGestureRecognizer(target: self, action: #selector(mainPage.edit_ProfilePic))
         self.UserPhoto.addGestureRecognizer(tap)
         self.UserPhoto.userInteractionEnabled = true
-        self.UserInformation(){ namez in
+        self.UserInformation({ namez in
             self.Name.text = namez
             
-        }
-        self.StoryCollection.delegate = self
-        self.StoryCollection.dataSource = self
-        //self.StoryCollection.delegate = self
-        //self.StoryCollection.dataSource = self
-        self.UserAlbums(){_ in
-            self.StoryCollection.reloadData()
-            }
-        }
+        })
+        self.currentViewController?.reloadInputViews()
+    }
+    
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(true)
@@ -94,6 +87,21 @@ class mainPage: UIViewController, UICollectionViewDelegate, UICollectionViewData
         
     }
     
+    @IBAction func Tabviewer(sender: UISegmentedControl) {
+        if sender.selectedSegmentIndex == 0 {
+            let newViewController = self.storyboard?.instantiateViewControllerWithIdentifier("Stories")
+            newViewController!.view.translatesAutoresizingMaskIntoConstraints = false
+            self.cycleFromViewController(self.currentViewController!, toViewController: newViewController!)
+            self.currentViewController = newViewController
+        }
+        else {
+            let newViewController = self.storyboard?.instantiateViewControllerWithIdentifier("Moments")
+            newViewController!.view.translatesAutoresizingMaskIntoConstraints = false
+            self.cycleFromViewController(self.currentViewController!, toViewController: newViewController!)
+            self.currentViewController = newViewController
+        }
+
+    }
     func edit_ProfilePic(){
         
     }
@@ -126,123 +134,43 @@ class mainPage: UIViewController, UICollectionViewDelegate, UICollectionViewData
         return true
     }
     
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.cellData.count
+    func cycleFromViewController(oldViewController: UIViewController, toViewController newViewController: UIViewController) {
+        oldViewController.willMoveToParentViewController(nil)
+        self.addChildViewController(newViewController)
+        self.addSubview(newViewController.view, toView:self.ContainerItem!)
+        newViewController.view.alpha = 0
+        //newViewController.viewDidLoad()
+        newViewController.view.reloadInputViews()
+        newViewController.view.setNeedsLayout()
+        UIView.animateWithDuration(0.5, animations: {
+            newViewController.view.alpha = 1
+            oldViewController.view.alpha = 0
+            },
+                                   completion: { finished in
+                                    //oldViewController.viewDidDisappear(true)
+                                    oldViewController.view.removeFromSuperview()
+                                    oldViewController.removeFromParentViewController()
+                                    newViewController.didMoveToParentViewController(self)
+        })
     }
     
-
-    
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Story", forIndexPath: indexPath) as! StoryCell
+    func addSubview(subView:UIView, toView parentView:UIView) {
+        parentView.addSubview(subView)
         
-        let cells = cellData[indexPath.row]
-        let URLString = cells.PhotoURL
-        let URL = NSURL(string:URLString as String)!
-        //cell.coverphoto.hnk_setImageFromURL(URL)
-        //cell.coverphoto.hnk_setImageFromURL(URL, format: Format<UIImage>(name: "original"))
-        cell.coverphoto.kf_setImageWithURL(URL)
-        cell.caption.text = cells.ID
-        
-        return cell
-    }
-    
-    func UserAlbums(completion: (result: String) -> Void){
-        if let USERID = KeychainWrapper.stringForKey("UserID"){
-        Alamofire.request(.POST, "http://imageshare.io/api/getalbums.php", parameters: ["userId":USERID]) .responseJSON { response in
-                if let jsn = response.result.value {
-                    if let returnval = jsn as? [String:AnyObject]{
-                        if let AlbumInfo = returnval["albums"] as? NSArray{
-                            for albums in AlbumInfo{
-                                if let album = albums as? [String:AnyObject]{
-                                    if let albumID = album["albumId"] as? NSString{
-                                        if let albumz_name = album["albumName"] as? String {
-                                        self.albumCover(albumID){(fifth: String) in
-                                            self.populateData(albumz_name, datatwo: fifth,datathree: albumID as String)
-                                            if ((AlbumInfo.indexOfObject(albums) + 1) == AlbumInfo.count){
-                                            completion(result: "done")
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-    func albumCover(idAlbum:NSString,completion: (result: String) -> Void){
-        if let USERID = KeychainWrapper.stringForKey("UserID"){
-            //for album in self.AlbumCollection{
-            Alamofire.request(.POST, "http://imageshare.io/api/getalbumdetail.php", parameters: ["userId":USERID,"albumId":idAlbum]) .responseJSON { response in // 1
-                if let jsn = response.result.value {
-                        if let first = jsn as? [String:AnyObject]{
-                            if let second = first["album"] as? NSDictionary{
-                               // print(second)
-                                if let third = second["images"] as? NSArray{
-                                    //print(third)
-                                    if let fourth = third.firstObject as? NSDictionary{
-                                        if let fifth = fourth["imageLocation"] as? NSString{
-                                             completion(result: fifth as String)
-                                        }
-                                        
-                                    }
-                                    
-                                }
-                            }
-                        }
-                }
-               // print(self.cellData.count)
-            }
-        //}
-
-        }
+        var viewBindingsDict = [String: AnyObject]()
+        viewBindingsDict["subView"] = subView
+        parentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[subView]|",
+            options: [], metrics: nil, views: viewBindingsDict))
+        parentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[subView]|",
+            options: [], metrics: nil, views: viewBindingsDict))
     }
 
-     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        performSegueWithIdentifier("PhotoAlbum", sender: cellData[indexPath.row].ActualID)
-    }
-    
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
-        if (segue.identifier == "PhotoAlbum") {
-            let svc = segue.destinationViewController as! online_albums
-            svc.DataPassed = sender as! String
-        }
-    }
-
-    
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        let picDimension = self.view.frame.size.width/2
-        return CGSizeMake(picDimension, picDimension)
-    }
-    
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {
-        return UIEdgeInsetsMake(0, 0, 0, 0)
-    }
-    
-    func collectionView(collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                               minimumLineSpacingForSectionAtIndex section: Int) -> CGFloat{
-        return 0
-    }
-    
-    func collectionView(collectionView: UICollectionView,
-                        layout collectionViewLayout: UICollectionViewLayout,
-                               minimumInteritemSpacingForSectionAtIndex section: Int) -> CGFloat{
-        return 0
-    }
-    
-    func populateData(dataone:String,datatwo:NSString,datathree:String){
-    self.cellData.append(CellContent(ID: dataone, PhotoURL: datatwo,ActualID: datathree))
-    }
-    
     func UserInformation(completion: (nUser: String) -> Void){
         if let userID = KeychainWrapper.stringForKey("UserID"){
-            Alamofire.request(.POST, "http://imageshare.io/api/getuserinfo.php", parameters: ["userId":userID]) .responseJSON { response in // 1
+            Alamofire.request(.POST, "http://imageshare.io/api/v1/getuserinfo.php", parameters: ["userId":userID])
+                .responseJSON { response in // 1
                 if let jsn = response.result.value {
+                    //print(jsn)
                     if let first = jsn as? NSDictionary{
                         if let second = first["error"] as? Int{
                             if (second == 0){

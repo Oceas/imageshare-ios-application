@@ -72,24 +72,27 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
 
     @IBOutlet weak var Collection: UICollectionView!
 
-    @IBOutlet weak var NavBar: UINavigationItem!
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationItem.title = dataPassed?.localizedTitle
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Select", style: .Plain, target: self, action: #selector(CollectionViewController.Selecting(_:)))
+        Backbutton = self.navigationItem.backBarButtonItem
+        Selectbutton = self.navigationItem.rightBarButtonItem
+        //self.NavBar.title = dataPassed?.localizedTitle
+        //Backbutton = self.NavBar.leftBarButtonItem
+        //Selectbutton = self.NavBar.rightBarButtonItem
+        Uploadbutton = UIBarButtonItem(title: "Upload", style: .Plain, target: self, action: #selector(CollectionViewController.Uploading(_:)))
+        Cancelbutton = UIBarButtonItem(title: "Cancel", style: .Plain, target: self, action: #selector(CollectionViewController.Canceling(_:)))
         Collection.dataSource = self
         Collection.delegate = self
         Collection.scrollEnabled = true
         Collection.allowsMultipleSelection = SelectOption
         let fetchOptions = PHFetchOptions()
         let album = PHAsset.fetchAssetsInAssetCollection(dataPassed!, options: fetchOptions)
-        self.NavBar.title = dataPassed?.localizedTitle
-        Backbutton = self.NavBar.leftBarButtonItem
-        Selectbutton = self.NavBar.rightBarButtonItem
-        Uploadbutton = UIBarButtonItem(title: "Upload", style: .Plain, target: self, action: #selector(CollectionViewController.Uploading(_:)))
-        Cancelbutton = UIBarButtonItem(title: "Cancel", style: .Plain, target: self, action: #selector(CollectionViewController.Canceling(_:)))
         
-        self.NavBar.rightBarButtonItem?.action = #selector(CollectionViewController.Selecting(_:))
+        //self.NavBar.rightBarButtonItem?.action = #selector(CollectionViewController.Selecting(_:))
         
         
         for i in 0 ... (album.count - 1){
@@ -102,10 +105,10 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
     Collection.reloadData()
     
     }
-    */
+ */
     override func viewWillLayoutSubviews() {
         super.viewDidLayoutSubviews()
-       // Collection.collectionViewLayout.invalidateLayout()
+       Collection.collectionViewLayout.invalidateLayout()
     }
     
     func closePop(){
@@ -135,8 +138,10 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
     
     func Canceling(sender: UIBarButtonItem) {
         SelectOption = false
-        NavBar.leftBarButtonItem = Backbutton
-        NavBar.rightBarButtonItem = Selectbutton
+        self.navigationItem.leftBarButtonItem = Backbutton
+        self.navigationItem.rightBarButtonItem = Selectbutton
+        //NavBar.leftBarButtonItem = Backbutton
+        //NavBar.rightBarButtonItem = Selectbutton
         Collection.allowsMultipleSelection = SelectOption
         for indexPath in Collection.indexPathsForSelectedItems()!{
             self.Collection.deselectItemAtIndexPath(indexPath, animated: false)
@@ -146,8 +151,10 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
     }
     func Selecting(sender: UIBarButtonItem){
         SelectOption = true
-        NavBar.leftBarButtonItem = Cancelbutton
-        NavBar.rightBarButtonItem = Uploadbutton
+        self.navigationItem.leftBarButtonItem = Cancelbutton
+        self.navigationItem.rightBarButtonItem = Uploadbutton
+        //NavBar.leftBarButtonItem = Cancelbutton
+        //NavBar.rightBarButtonItem = Uploadbutton
         Collection.allowsMultipleSelection = SelectOption
         //self.Collection.reloadData()
     }

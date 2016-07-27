@@ -7,10 +7,8 @@
 //
 
 import Alamofire
-import AlamofireImage
 import Foundation
 import UIKit
-import Haneke
 import Kingfisher
 
 class StoryCell: UICollectionViewCell {
@@ -37,6 +35,7 @@ class StoryCell: UICollectionViewCell {
         caption.clipsToBounds = true
         caption.contentMode = .ScaleToFill
         caption.textColor = UIColor.whiteColor()
+        caption.backgroundColor = UIColor(red: 45/255.0, green:0/255.0, blue:220/255.0, alpha: 0.5)
         self.contentView.addSubview(coverphoto)
         self.contentView.addSubview(caption)
     }

@@ -21,7 +21,7 @@ class CollectionViewCell: UICollectionViewCell {
     
     var imageAsset: PHAsset? {
         didSet {
-            self.imageManager?.requestImageForAsset(imageAsset!, targetSize: CGSize(width: 125, height: 125), contentMode: .AspectFill, options: nil) { image, info in
+            self.imageManager?.requestImageForAsset(imageAsset!, targetSize: CGSize(width: 125, height: 125), contentMode: .AspectFit, options: nil) { image, info in
                 self.thumb.image = image
             }
         }

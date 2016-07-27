@@ -8,7 +8,6 @@
 
 import UIKit
 import Alamofire
-import AlamofireImage
 import Haneke
 import Kingfisher
 
@@ -20,13 +19,6 @@ class online_albums: UIViewController,UITableViewDelegate, UITableViewDataSource
     var DataPassed:String!
     var PhCollection = [PhotoDetails]()
     var PClass = [PhotoClass]()
-    
-    let imageDownloader = ImageDownloader(
-        configuration: ImageDownloader.defaultURLSessionConfiguration(),
-        downloadPrioritization: .FIFO,
-        maximumActiveDownloads: 4,
-        imageCache: AutoPurgingImageCache()
-    )
     
     
     struct PhotoDetails{
@@ -74,8 +66,8 @@ class online_albums: UIViewController,UITableViewDelegate, UITableViewDataSource
         let cell = tableView.dequeueReusableCellWithIdentifier("onlineCell", forIndexPath: indexPath) as! Photo_Online
         
         let data = self.PClass[indexPath.row]
-        let URL = NSURL(string:data.getURL())!
-        cell.PH_Image.kf_setImageWithURL(URL)
+        let KURL = NSURL(string:data.getURL())!
+        cell.PH_Image.kf_setImageWithURL(KURL)
         //cell.PH_Image.hnk_setImageFromURL(URL)
         //cell.PH_Image.af_setImageWithURL(URL)
         return cell
@@ -86,7 +78,7 @@ class online_albums: UIViewController,UITableViewDelegate, UITableViewDataSource
     func albumCover(idAlbum:String,completion: (result: String) -> Void){
         if let USERID = KeychainWrapper.stringForKey("UserID"){
             //for album in self.AlbumCollection{
-            Alamofire.request(.POST, "http://imageshare.io/api/getalbumdetail.php", parameters: ["userId":USERID,"albumId":idAlbum]) .responseJSON { response in // 1
+            Alamofire.request(.POST, "http://imageshare.io/api/v1/getalbumdetail.php", parameters: ["userId":USERID,"albumId":idAlbum]) .responseJSON { response in // 1
                 if let jsn = response.result.value {
                     if let first = jsn as? [String:AnyObject]{
                         if let second = first["album"] as? NSDictionary{
@@ -97,6 +89,7 @@ class online_albums: UIViewController,UITableViewDelegate, UITableViewDataSource
                                     if let PhotoInfo = albumphotos as? NSDictionary{
                                         if let photoURL = PhotoInfo["imageLocation"] as? String{
                                             if let photoName = PhotoInfo["imageName"] as? String{
+                                                print(photoURL)
                                                 if let photoDesc = PhotoInfo["imageDesc"] as? String{
                                             self.PClass.append(PhotoClass(PhotoURL: photoURL, PhotoName: photoName, PhotoDesc: photoDesc))
                                                     if (third.indexOfObject(albumphotos) == third.count - 1){

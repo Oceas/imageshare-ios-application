@@ -111,7 +111,7 @@ class Login: UIViewController {
             }
         }
         else{
-            Alamofire.request(.POST, "http://imageshare.io/api/login.php", parameters: ["email":self.username.text!,"password":self.password.text!]) .responseJSON { response in // 1
+            Alamofire.request(.POST, "http://imageshare.io/api/v1/login.php", parameters: ["email":self.username.text!,"password":self.password.text!]) .responseJSON { response in // 1
                 if let jsn = response.result.value {
                     if let checkpoint = jsn as? [String: AnyObject]{
                         print(checkpoint)

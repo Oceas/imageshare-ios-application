@@ -8,8 +8,6 @@
 
 import UIKit
 import Alamofire
-import Haneke
-import AlamofireImage
 import AlamofireNetworkActivityIndicator
 import Kingfisher
 
@@ -87,6 +85,7 @@ class SlideshowView: UIViewController {
     }
     
     func Swipe_Right(){
+        self.updateCap()
         if (self.i + 1) <= (PhotoDetails.count - 1){
             self.i += 1
         }
@@ -97,6 +96,7 @@ class SlideshowView: UIViewController {
     }
     
     func Swipe_Left(){
+        self.updateCap()
         if (self.i - 1) >= 0{
             self.i -= 1
         }
@@ -104,6 +104,15 @@ class SlideshowView: UIViewController {
             self.i = (PhotoDetails.count - 1)
         }
         self.changePhoto()
+    }
+    
+    func updateCap(){
+        if(self.PhotoDetails.count > 0){
+        let cap = self.PhotoDetails[i].getDesc()
+            if (self.PhotoComments.text != cap){
+                self.PhotoDetails[i].Updatedesc(self.PhotoComments.text)
+            }
+        }
     }
     
     func setImageWith(request:[String]) {
@@ -126,7 +135,7 @@ class SlideshowView: UIViewController {
     
 
     func changePhoto(){
-        let NURL = NSURL(string: self.PhotoDetails[self.i].getURL())!
+        //let NURL = NSURL(string: self.PhotoDetails[self.i].getURL())!
        // self.DisplayIMG.hnk_cancelSetImage()
         //print(self.PhotoDetails[self.i].getName())
         //self.DisplayIMG.image = nil
@@ -175,13 +184,33 @@ class SlideshowView: UIViewController {
             self.slideshow()
         }
         else{
+            self.bottombar.items![0].accessibilityElementsHidden = false
             self.bottombar.items![2] = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Play, target: self, action: #selector(SlideshowView.Playbtn(_:)))
             self.stopSlide()
             self.timer.invalidate()
         }
     }
     
+    @IBAction func DeletePhoto(sender: AnyObject) {
+        KingfisherManager.sharedManager.cache.removeImageForKey(self.PhotoDetails[self.i].getURL())
+        self.PhotoDetails.removeAtIndex(self.i)
+        if(self.PhotoDetails.count < 1){
+            self.goBack(self)
+        }
+        else{
+            if (self.i - 1) >= 0{
+                self.i -= 1
+            }
+            else{
+                self.i = (PhotoDetails.count - 1)
+            }
+            self.changePhoto()
+        }
+    }
+    
+    
     @IBAction func goBack(sender: AnyObject) {
+        self.updateCap()
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
