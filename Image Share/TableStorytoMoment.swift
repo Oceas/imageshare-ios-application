@@ -38,12 +38,17 @@ class TableStorytoMoment: UITableViewController {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Home", style: .Plain, target: self, action: #selector(TableStorytoMoment.sendmeback(_:)))
         self.TheTable.delegate = self
         self.TheTable.dataSource = self
+        
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(true)
+        self.cellData.removeAll()
         self.getStoryDetail(datapassed!, completion:{ Aname in
             self.TheTable.reloadData()
             self.navigationItem.title = Aname
             //print(self.cellData)
         })
-        
     }
 
     override func didReceiveMemoryWarning() {

@@ -47,10 +47,10 @@ class online_albums: UIViewController,UITableViewDelegate, UITableViewDataSource
         super.viewWillAppear(true)
         self.PhCollection.removeAll()
         self.PClass.removeAll()
-        print(DataPassed)
+        //print(DataPassed)
         self.albumCover(DataPassed, completion:{ _ in
         self.ThePhotoTable.reloadData()
-        print(self.PClass)
+        //print(self.PClass)
         })
     }
     
@@ -93,7 +93,7 @@ class online_albums: UIViewController,UITableViewDelegate, UITableViewDataSource
             //for album in self.AlbumCollection{
             Alamofire.request(.POST, "http://imageshare.io/api/v1/getalbumdetail.php", parameters: ["userId":USERID,"albumId":idAlbum]) .responseJSON { response in // 1
                 if let jsn = response.result.value {
-                    print(jsn)
+                   // print(jsn)
                     if let first = jsn as? [String:AnyObject]{
                         if let second = first["album"] as? NSDictionary{
                             // print(second)

@@ -892,34 +892,57 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="N8O-0l-1ah">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                <items>
+                                    <barButtonItem systemItem="trash" id="Gt9-BQ-Bch">
+                                        <connections>
+                                            <action selector="deleteSelection:" destination="KWi-BP-O5Y" id="07l-8f-MtU"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="GlJ-bT-blM" firstAttribute="top" secondItem="OHn-mW-oKQ" secondAttribute="top" id="Gc0-b1-yZP"/>
-                            <constraint firstItem="GlJ-bT-blM" firstAttribute="leading" secondItem="OHn-mW-oKQ" secondAttribute="leading" id="Kz2-2n-Am4"/>
-                            <constraint firstItem="GlJ-bT-blM" firstAttribute="bottom" secondItem="rEo-yS-wCb" secondAttribute="top" id="LGM-KL-ahT"/>
-                            <constraint firstAttribute="trailing" secondItem="GlJ-bT-blM" secondAttribute="trailing" id="PLf-aD-bkb"/>
+                            <constraint firstItem="N8O-0l-1ah" firstAttribute="leading" secondItem="GlJ-bT-blM" secondAttribute="leading" id="1bx-az-xKM"/>
+                            <constraint firstItem="N8O-0l-1ah" firstAttribute="bottom" secondItem="rEo-yS-wCb" secondAttribute="top" id="51G-tU-7CT"/>
+                            <constraint firstItem="GlJ-bT-blM" firstAttribute="leading" secondItem="OHn-mW-oKQ" secondAttribute="leading" id="7BS-0o-HrO"/>
+                            <constraint firstItem="GlJ-bT-blM" firstAttribute="bottom" secondItem="rEo-yS-wCb" secondAttribute="top" id="LGM-KL-ahT">
+                                <variation key="widthClass=compact" constant="-44"/>
+                            </constraint>
+                            <constraint firstItem="GlJ-bT-blM" firstAttribute="top" secondItem="OHn-mW-oKQ" secondAttribute="top" id="aTb-1g-s0H"/>
+                            <constraint firstItem="N8O-0l-1ah" firstAttribute="trailing" secondItem="GlJ-bT-blM" secondAttribute="trailing" id="e1W-xa-Cl5"/>
+                            <constraint firstAttribute="trailing" secondItem="GlJ-bT-blM" secondAttribute="trailing" id="u8j-bJ-4z7"/>
                         </constraints>
                         <variation key="default">
                             <mask key="subviews">
                                 <exclude reference="GlJ-bT-blM"/>
+                                <exclude reference="N8O-0l-1ah"/>
                             </mask>
                             <mask key="constraints">
-                                <exclude reference="Gc0-b1-yZP"/>
-                                <exclude reference="Kz2-2n-Am4"/>
+                                <exclude reference="7BS-0o-HrO"/>
                                 <exclude reference="LGM-KL-ahT"/>
-                                <exclude reference="PLf-aD-bkb"/>
+                                <exclude reference="aTb-1g-s0H"/>
+                                <exclude reference="u8j-bJ-4z7"/>
+                                <exclude reference="1bx-az-xKM"/>
+                                <exclude reference="51G-tU-7CT"/>
+                                <exclude reference="e1W-xa-Cl5"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
                             <mask key="subviews">
                                 <include reference="GlJ-bT-blM"/>
+                                <include reference="N8O-0l-1ah"/>
                             </mask>
                             <mask key="constraints">
-                                <include reference="Gc0-b1-yZP"/>
-                                <include reference="Kz2-2n-Am4"/>
+                                <include reference="7BS-0o-HrO"/>
                                 <include reference="LGM-KL-ahT"/>
-                                <include reference="PLf-aD-bkb"/>
+                                <include reference="aTb-1g-s0H"/>
+                                <include reference="u8j-bJ-4z7"/>
+                                <include reference="1bx-az-xKM"/>
+                                <include reference="51G-tU-7CT"/>
+                                <include reference="e1W-xa-Cl5"/>
                             </mask>
                         </variation>
                     </view>
@@ -930,7 +953,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="n2F-yU-OYF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-969" y="1754"/>
+            <point key="canvasLocation" x="-1044" y="1754"/>
         </scene>
         <!--Table Storyto Moment-->
         <scene sceneID="IOK-hT-fyJ">
@@ -1096,19 +1119,38 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Xn-LZ-cTP">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                <items>
+                                    <barButtonItem systemItem="trash" id="eIW-K4-IfG">
+                                        <connections>
+                                            <action selector="deleteselection:" destination="eRx-Vh-Iqr" id="Gew-N5-43I"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="r2e-wt-nRO" firstAttribute="top" secondItem="g8B-Qq-Hst" secondAttribute="top" id="LdZ-Mo-Y3M"/>
                             <constraint firstAttribute="trailing" secondItem="r2e-wt-nRO" secondAttribute="trailing" id="NyS-fW-Zau"/>
-                            <constraint firstItem="r2e-wt-nRO" firstAttribute="bottom" secondItem="nMy-hL-cvD" secondAttribute="top" id="Qsi-wS-xAl"/>
+                            <constraint firstItem="r2e-wt-nRO" firstAttribute="bottom" secondItem="nMy-hL-cvD" secondAttribute="top" id="Qsi-wS-xAl">
+                                <variation key="widthClass=compact" constant="-44"/>
+                            </constraint>
+                            <constraint firstItem="0Xn-LZ-cTP" firstAttribute="trailing" secondItem="r2e-wt-nRO" secondAttribute="trailing" id="WVy-PS-Luo"/>
                             <constraint firstItem="r2e-wt-nRO" firstAttribute="leading" secondItem="g8B-Qq-Hst" secondAttribute="leading" id="YCi-oY-wTe"/>
+                            <constraint firstItem="0Xn-LZ-cTP" firstAttribute="bottom" secondItem="nMy-hL-cvD" secondAttribute="top" id="a6w-Sc-TJf"/>
+                            <constraint firstItem="0Xn-LZ-cTP" firstAttribute="leading" secondItem="r2e-wt-nRO" secondAttribute="leading" id="knA-oY-kmQ"/>
                         </constraints>
                         <variation key="default">
                             <mask key="subviews">
                                 <exclude reference="r2e-wt-nRO"/>
+                                <exclude reference="0Xn-LZ-cTP"/>
                             </mask>
                             <mask key="constraints">
+                                <exclude reference="WVy-PS-Luo"/>
+                                <exclude reference="a6w-Sc-TJf"/>
+                                <exclude reference="knA-oY-kmQ"/>
                                 <exclude reference="LdZ-Mo-Y3M"/>
                                 <exclude reference="NyS-fW-Zau"/>
                                 <exclude reference="Qsi-wS-xAl"/>
@@ -1118,8 +1160,12 @@
                         <variation key="widthClass=compact">
                             <mask key="subviews">
                                 <include reference="r2e-wt-nRO"/>
+                                <include reference="0Xn-LZ-cTP"/>
                             </mask>
                             <mask key="constraints">
+                                <include reference="WVy-PS-Luo"/>
+                                <include reference="a6w-Sc-TJf"/>
+                                <include reference="knA-oY-kmQ"/>
                                 <include reference="LdZ-Mo-Y3M"/>
                                 <include reference="NyS-fW-Zau"/>
                                 <include reference="Qsi-wS-xAl"/>
@@ -2014,7 +2060,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KEX-FK-syj" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-969" y="974"/>
+            <point key="canvasLocation" x="-1044" y="949"/>
         </scene>
     </scenes>
     <resources>
@@ -2022,8 +2068,8 @@
         <image name="user-512.png" width="512" height="512"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="ggT-1A-4Tl"/>
-        <segue reference="Ug9-gY-Qqe"/>
         <segue reference="YrM-j6-1ek"/>
+        <segue reference="Ug9-gY-Qqe"/>
+        <segue reference="Ge8-Eb-WGF"/>
     </inferredMetricsTieBreakers>
 </document>

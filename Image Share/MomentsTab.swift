@@ -15,7 +15,8 @@ class MomentsTab: UIViewController, UICollectionViewDelegate, UICollectionViewDa
 
     var AlbumCollection = [NSString]()
     var cellData = [CellContent]()
-    
+    var selected = true
+    var StoryCatch = [String]()
     struct CellContent {
         var ID:String!
         var PhotoURL:NSString!
@@ -31,6 +32,7 @@ class MomentsTab: UIViewController, UICollectionViewDelegate, UICollectionViewDa
         super.viewDidLoad()
         self.cellData.removeAll()
         self.AlbumCollection.removeAll()
+        self.StoryCatch.removeAll()
         self.StoryCollection.delegate = self
         self.StoryCollection.dataSource = self
         self.UserAlbums(){_ in
@@ -40,9 +42,8 @@ class MomentsTab: UIViewController, UICollectionViewDelegate, UICollectionViewDa
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(true)
-        self.cellData.removeAll()
-        self.AlbumCollection.removeAll()
     }
+    
     func clearLoggedinFlagInUserDefaults() {
         let defaults = NSUserDefaults.standardUserDefaults()
         defaults.removeObjectForKey("userLoggedIn")
@@ -74,6 +75,7 @@ class MomentsTab: UIViewController, UICollectionViewDelegate, UICollectionViewDa
         //cell.coverphoto.hnk_setImageFromURL(URL, format: Format<UIImage>(name: "original"))
         cell.coverphoto.kf_setImageWithURL(URL)
         cell.caption.text = cells.ID
+        cell.deleting.hidden = self.selected
         
         return cell
     }
@@ -81,35 +83,27 @@ class MomentsTab: UIViewController, UICollectionViewDelegate, UICollectionViewDa
     
     func UserAlbums(completion: (result: String) -> Void){
         var count = 0
-        let queue = dispatch_queue_create("com.imageshare.getalbums", DISPATCH_QUEUE_SERIAL)
         if let USERID = KeychainWrapper.stringForKey("UserID"){
             Alamofire.request(.POST, "http://imageshare.io/api/v1/getalbums.php", parameters: ["userId":USERID]) .responseJSON { response in
                 if let jsn = response.result.value {
                     if let returnval = jsn as? [String:AnyObject]{
                         if let AlbumInfo = returnval["albums"] as? NSArray{
                             for albums in AlbumInfo{
-                                dispatch_async(queue) { () -> Void in
                                 if let album = albums as? [String:AnyObject]{
                                     if let albumID = album["albumId"] as? NSString{
                                         if let albumz_name = album["albumName"] as? String {
                                             self.albumCover(albumID,completion:{fifth in
-                                                dispatch_async(dispatch_get_main_queue(), {
                                                     count += 1
-                                                })
                                                 if fifth != "nothing"{
                                                     self.populateData(albumz_name, datatwo: fifth,datathree: albumID as String)
-                                                    dispatch_async(dispatch_get_main_queue(), {
                                                         if count == AlbumInfo.count{
                                                             completion(result: "done")
                                                         }
-                                                    })
                                                 }
                                                 else{
-                                                    dispatch_async(dispatch_get_main_queue(), {
                                                         if count == AlbumInfo.count{
                                                             completion(result: "done")
-                                                        }
-                                                    })
+                                                    }
                                                 }
                                             })
                                         }
@@ -122,8 +116,12 @@ class MomentsTab: UIViewController, UICollectionViewDelegate, UICollectionViewDa
                 }
             }
         }
-    }
     
+    @IBAction func deleteselection(sender: AnyObject) {
+        self.selected = !self.selected
+        self.StoryCollection.reloadData()
+    }
+
     func albumCover(idAlbum:NSString,completion: (result: String) -> Void){
         if let USERID = KeychainWrapper.stringForKey("UserID"){
             //for album in self.AlbumCollection{
@@ -156,9 +154,37 @@ class MomentsTab: UIViewController, UICollectionViewDelegate, UICollectionViewDa
 
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        if(!self.selected){
+            let alert = UIAlertController(title: "Delete Moment", message: "Are You Sure You Want To Permanently Remove This Moment?", preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: "Yes", style: .Default, handler: { _ in
+                self.RemoveAlbum(self.cellData[indexPath.row].ActualID,comp:{ _ in
+                    KingfisherManager.sharedManager.cache.removeImageForKey(self.cellData[indexPath.row].PhotoURL as String)
+                    self.viewDidLoad()
+                    /*
+                     self.contains.removeAtIndex(indexPath.row)
+                     self.cellData.removeAtIndex(indexPath.row)
+                     self.Stories_Collection.reloadData()
+                     */
+                })
+            }))
+            alert.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler:nil))
+            self.presentViewController(alert, animated: true, completion: nil)
+        }else{
         performSegueWithIdentifier("PhotoAlbum", sender: cellData[indexPath.row].ActualID)
+        }
     }
     
+    func RemoveAlbum(ID:String,comp:(result:String)->Void){
+        if let USERID = KeychainWrapper.stringForKey("UserID"){
+            //for album in self.AlbumCollection{
+            Alamofire.request(.POST, "http://imageshare.io/api/v1/deletealbum.php", parameters: ["userId":USERID,"albumId":ID]) .responseJSON { response in // 1
+                if let jsn = response.result.value {
+                    //print(jsn)
+                    comp(result: "done")
+                }
+            }
+        }
+    }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         if (segue.identifier == "PhotoAlbum") {
@@ -190,7 +216,10 @@ class MomentsTab: UIViewController, UICollectionViewDelegate, UICollectionViewDa
     }
     
     func populateData(dataone:String,datatwo:NSString,datathree:String){
+        if(!self.StoryCatch.contains(datathree)){
+        self.StoryCatch.append(datathree)
         self.cellData.append(CellContent(ID: dataone, PhotoURL: datatwo,ActualID: datathree))
+        }
     }
     
 
