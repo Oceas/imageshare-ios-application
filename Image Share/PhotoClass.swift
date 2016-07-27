@@ -19,11 +19,17 @@ class PhotoClass:NSObject{
     private var PhotoURL:String!
     private var PhotoName:String!
     private var PhotoDesc:String!
+    private var PhotoID:String!
     
-    init(PhotoURL:String, PhotoName:String, PhotoDesc:String){
+    init(PhotoURL:String, PhotoName:String, PhotoDesc:String,PhotoID:String){
         self.PhotoURL = PhotoURL
         self.PhotoName = PhotoName
         self.PhotoDesc = PhotoDesc
+        self.PhotoID = PhotoID
+    }
+    
+    func getphotoID() -> String{
+        return self.PhotoID
     }
     
     func Updatedesc(PDesc:String){

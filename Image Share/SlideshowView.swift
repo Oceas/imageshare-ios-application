@@ -192,6 +192,7 @@ class SlideshowView: UIViewController {
     }
     
     @IBAction func DeletePhoto(sender: AnyObject) {
+        self.deletephoto(self.PhotoDetails[self.i].getphotoID(),completion:{ _ in
         KingfisherManager.sharedManager.cache.removeImageForKey(self.PhotoDetails[self.i].getURL())
         self.PhotoDetails.removeAtIndex(self.i)
         if(self.PhotoDetails.count < 1){
@@ -202,10 +203,11 @@ class SlideshowView: UIViewController {
                 self.i -= 1
             }
             else{
-                self.i = (PhotoDetails.count - 1)
+                self.i = (self.PhotoDetails.count - 1)
             }
             self.changePhoto()
         }
+                })
     }
     
     
@@ -233,6 +235,18 @@ class SlideshowView: UIViewController {
         self.bottombar.hidden = !self.bottombar.hidden.boolValue
     }
 
+    func deletephoto(idImage:String,completion: (result: String) -> Void){
+            if let USERID = KeychainWrapper.stringForKey("UserID"){
+                //for album in self.AlbumCollection{
+                Alamofire.request(.POST, "http://imageshare.io/api/v1/deleteimage.php", parameters: ["userId":USERID,"imageId":idImage]) .responseJSON { response in // 1
+                    if let jsn = response.result.value {
+                        print(jsn)
+                        completion(result: "done")
+                    }
+                }
+        }
+    }
+}
     /*
     // MARK: - Navigation
 
@@ -243,4 +257,3 @@ class SlideshowView: UIViewController {
     }
     */
 
-}

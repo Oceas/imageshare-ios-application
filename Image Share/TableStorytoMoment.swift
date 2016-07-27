@@ -177,9 +177,24 @@ class TableStorytoMoment: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        //let cell = tableView.dequeueReusableCellWithIdentifier("AnotherCell", forIndexPath: indexPath) as! storytomomentCell
         
         performSegueWithIdentifier("toAlbum", sender: self.cellData[indexPath.row].ActualID)
 
+    }
+    
+    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return true
+    }
+    
+    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if (editingStyle == UITableViewCellEditingStyle.Delete) {
+            self.deletealbum(self.cellData[indexPath.row].ActualID,handler: {_ in 
+            KingfisherManager.sharedManager.cache.removeImageForKey(self.cellData[indexPath.row].PhotoURL)
+            self.cellData.removeAtIndex(indexPath.row)
+            self.TheTable.reloadData()
+            })
+        }
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
@@ -189,7 +204,17 @@ class TableStorytoMoment: UITableViewController {
         }
     }
     
-    
+    func deletealbum(idAlbum:String,handler: (result: String) -> Void){
+        if let USERID = KeychainWrapper.stringForKey("UserID"){
+            //for album in self.AlbumCollection{
+            Alamofire.request(.POST, "http://imageshare.io/api/v1/deletealbum.php", parameters: ["userId":USERID,"albumId":idAlbum]) .responseJSON { response in // 1
+                if let jsn = response.result.value {
+                    //print(jsn)
+                    handler(result: "done")
+                }
+            }
+        }
+    }
 
     /*
     // Override to support conditional editing of the table view.
