@@ -62,6 +62,7 @@ class selectAlbum:FormViewController{
             self.MCval = self.storyname.first
             self.SStruct.append(sInfo(name: "New Story", ID: "NONE"))
             self.MStruct.append(mInfo(name: "Create Moment", ID: "NONE"))
+            print(self.albumname)
             self.form +++ Section("Story Selection")
                 <<< PushRow<String>("CurrentStories") {
                     $0.title = "Select Story"
@@ -81,6 +82,15 @@ class selectAlbum:FormViewController{
                             self!.getStoryDetail(self!.SStruct[self!.albumname.indexOf(self!.CurrentVal)!].ID,completion: { _ in
                                     self!.form.rowByTag("CurrentMoments")!.updateCell()
                                 })
+                            }
+                            else{
+                                self!.storyname.removeAll()
+                                //self!.storyname.removeAll(keepCapacity: true)
+                                self!.MStruct.removeAll()
+                                self!.storyname.append("Create Moment")
+                                self!.MStruct.append(mInfo(name: "Create Moment", ID: "NONE"))
+                                self!.MCval = "Create Moment"
+                                self!.form.rowByTag("CurrentMoments")!.updateCell()
                             }
                         }
                         else{
@@ -210,9 +220,11 @@ class selectAlbum:FormViewController{
                     self.presentViewController(alert, animated: true, completion:nil)
                     return
                 }
-                print(self.sStoryName)
+                //print(self.sStoryName)
                 self.CreateStoryAPI({ id_story in
+                    print("step1")
                     self.CreateAlbumAPI({ id_moment in
+                        print("step2")
                         self.Moment_to_Story(id_moment, sID: id_story, completion:{ _ in
                             print("Story & Moment Created and linked")
                             self.delegate?.saveText(id_moment)
@@ -377,7 +389,7 @@ class selectAlbum:FormViewController{
                             if moments.count == 0{completion(result: "done")}
                                 for moment in moments{
                                     if let detail = moment as? NSDictionary{
-                                        print(detail)
+                                       // print(detail)
                                         if let MID = detail["albumId"] as? String{
                                             if let Mname = detail["albumName"] as? String{
                                                 //print(Mname)

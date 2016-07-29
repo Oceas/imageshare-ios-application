@@ -50,13 +50,15 @@ class StoriesTab: UIViewController, UICollectionViewDelegate, UICollectionViewDa
         self.StoryData.removeAll()
         self.AlbumCollection.removeAll()
         self.contains.removeAll()
-        self.getAllStories({_ in
-            //dispatch_suspend(self.queue!)
-            self.Stories_Collection.reloadData()
-            //print(self.cellData.count)
-        })
         self.Stories_Collection.delegate = self
         self.Stories_Collection.dataSource = self
+        self.getAllStories({_ in
+            //dispatch_suspend(self.queue!)
+            dispatch_async(dispatch_get_main_queue(),{
+            self.Stories_Collection.reloadData()
+            })
+            //print(self.cellData.count)
+        })
     }
     
     override func didReceiveMemoryWarning() {
@@ -99,11 +101,17 @@ class StoriesTab: UIViewController, UICollectionViewDelegate, UICollectionViewDa
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Momentum", forIndexPath: indexPath) as! MomentsCell
         
         let cells = cellData[indexPath.row]
+        
+        if cells.PhotoURL == "Blank"{
+        cell.coverphoto.image = UIImage(named: "Blank")?.kf_normalizedImage()
+        }
+        else{
         let URLString = cells.PhotoURL
         let URL = NSURL(string:URLString)!
         //cell.coverphoto.hnk_setImageFromURL(URL)
         //cell.coverphoto.hnk_setImageFromURL(URL, format: Format<UIImage>(name: "original"))
         cell.coverphoto.kf_setImageWithURL(URL)
+        }
         cell.caption.text = cells.StoryName
         cell.deleting.hidden = self.selected
         //cell.selectedBackgroundView?.addSubview(UIImageView.init(image: UIImage.init(named: "DeleteRed")))
@@ -118,17 +126,19 @@ class StoriesTab: UIViewController, UICollectionViewDelegate, UICollectionViewDa
                 if let jsn = response.result.value {
                     //print(jsn)
                     if let first = jsn as? [String:AnyObject]{
+                        print(first)
                         if let second = first["album"] as? NSDictionary{
-                            // print(second)
+                             //print(second)
                             if let third = second["images"] as? NSArray{
-                               // print(third)
+                               //print(third)
                                 if let fourth = third.firstObject as? NSDictionary{
+                                    
                                     if let fifth = fourth["imageLocation"] as? String{
                                         //print(fifth)
                                         completion(result: fifth)
                                     }
                                     
-                                }else{completion(result:"nothing")}
+                                }
                                 
                             }
                         }
@@ -205,19 +215,23 @@ class StoriesTab: UIViewController, UICollectionViewDelegate, UICollectionViewDa
                         if (errortyp == 0){
                             if let storylayer = jsn["story"] as? NSDictionary{
                                 if let moments = storylayer["momments"] as? NSArray{
-                                    if moments.count == 0{completion(result: "done")}
+                                    if moments.count == 0{self.populateData("empty", datatwo:"Blank",datathree: "empty",datafour:sID,datafive:thename)
+                                        completion(result: "done")}
                                     for moment in moments{
                                         if let detail = moment as? NSDictionary{
                                             //print(detail)
                                             if let MID = detail["albumId"] as? String{
                                                 if let Mname = detail["albumName"] as? String{
-                                                    counts += 1
                                                     self.albumCover(MID,completion:{fifth in
+                                                        counts += 1
                                                         if fifth != "nothing"{
                                                             self.populateData(Mname, datatwo: fifth,datathree: MID,datafour:sID,datafive:thename)
                                                                 //print(counts)
                                                                 completion(result: "done")
-                                                        }else{completion(result: "done")}//if counts == moments.count{completion(result:"done")}}
+                                                        }else{if counts == moments.count{
+                                                            print("Hi")
+                                                            self.populateData(Mname, datatwo:"Blank",datathree: MID,datafour:sID,datafive:thename)
+                                                            completion(result:"done")}}
                                                         
                                                     })
                                                 }
@@ -225,7 +239,7 @@ class StoriesTab: UIViewController, UICollectionViewDelegate, UICollectionViewDa
                                             }
                                         }
                                     }
-                                }else{completion(result: "done")}
+                                }
                             }
                         }
                     }

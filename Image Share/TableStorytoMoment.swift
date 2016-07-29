@@ -36,14 +36,14 @@ class TableStorytoMoment: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Home", style: .Plain, target: self, action: #selector(TableStorytoMoment.sendmeback(_:)))
-        self.TheTable.delegate = self
-        self.TheTable.dataSource = self
-        
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(TableStorytoMoment.editstory(_:)))
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(true)
         self.cellData.removeAll()
+        self.TheTable.delegate = self
+        self.TheTable.dataSource = self
         self.getStoryDetail(datapassed!, completion:{ Aname in
             self.TheTable.reloadData()
             self.navigationItem.title = Aname
@@ -75,6 +75,10 @@ class TableStorytoMoment: UITableViewController {
     func sendmeback(sender:UIBarButtonItem){
         self.performSegueWithIdentifier("Sentback", sender: sender)
     }
+    
+    func editstory(sender:UIBarButtonItem){
+        self.performSegueWithIdentifier("toEdit", sender: sender)
+    }
 
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -97,7 +101,6 @@ class TableStorytoMoment: UITableViewController {
             //print(userID)
             Alamofire.request(.POST, "http://imageshare.io/api/v1/getstorydetail.php", parameters: ["userId":userID,"storyId":sID]) .responseJSON { response in // 1
                 if let jsn = response.result.value as? NSDictionary {
-                    //print(jsn)
                     if let errortyp = jsn["error"] as? Int{
                         if (errortyp == 0){
                             if let storylayer = jsn["story"] as? NSDictionary{
@@ -206,6 +209,11 @@ class TableStorytoMoment: UITableViewController {
         if (segue.identifier == "toAlbum") {
             let svc = segue.destinationViewController as! online_albums
             svc.DataPassed = sender as! String
+        }
+        
+        if (segue.identifier == "toEdit"){
+            let svc = segue.destinationViewController as! EditStories
+            svc.DataRecieved = self.datapassed! as String
         }
     }
     

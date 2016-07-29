@@ -32,7 +32,7 @@ class MomentsCell: UICollectionViewCell {
         //deleting.image = UIImage(named: "DeleteRed")
         coverphoto = UIImageView(frame: self.contentView.bounds)
         coverphoto.clipsToBounds = true
-        coverphoto.contentMode = .ScaleAspectFill
+        coverphoto.contentMode = .ScaleToFill
         coverphoto.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
         coverphoto.kf_showIndicatorWhenLoading = true
         deleting = UIImageView(frame: CGRect(x: 150, y: 20, width: 20, height: 20))
