@@ -40,6 +40,7 @@ class MomentsTab: UIViewController, UICollectionViewDelegate, UICollectionViewDa
         }
     }
     
+
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(true)
     }
@@ -69,11 +70,15 @@ class MomentsTab: UIViewController, UICollectionViewDelegate, UICollectionViewDa
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("Story", forIndexPath: indexPath) as! StoryCell
         
         let cells = cellData[indexPath.row]
+        
+        if (cells.PhotoURL=="Blank"){
+            cell.coverphoto.image = UIImage(named: "Blank")?.kf_normalizedImage()
+        }
+        else{
         let URLString = cells.PhotoURL
         let URL = NSURL(string:URLString as String)!
-        //cell.coverphoto.hnk_setImageFromURL(URL)
-        //cell.coverphoto.hnk_setImageFromURL(URL, format: Format<UIImage>(name: "original"))
         cell.coverphoto.kf_setImageWithURL(URL)
+        }
         cell.caption.text = cells.ID
         cell.deleting.hidden = self.selected
         
@@ -90,17 +95,18 @@ class MomentsTab: UIViewController, UICollectionViewDelegate, UICollectionViewDa
                         if let AlbumInfo = returnval["albums"] as? NSArray{
                             for albums in AlbumInfo{
                                 if let album = albums as? [String:AnyObject]{
-                                    if let albumID = album["albumId"] as? NSString{
+                                    if let albumID = album["albumId"] as? String{
                                         if let albumz_name = album["albumName"] as? String {
                                             self.albumCover(albumID,completion:{fifth in
                                                     count += 1
                                                 if fifth != "nothing"{
-                                                    self.populateData(albumz_name, datatwo: fifth,datathree: albumID as String)
+                                                    self.populateData(albumz_name, datatwo: fifth,datathree: albumID)
                                                         if count == AlbumInfo.count{
                                                             completion(result: "done")
                                                         }
                                                 }
                                                 else{
+                                                    self.populateData(albumz_name, datatwo: "Blank",datathree: albumID)
                                                         if count == AlbumInfo.count{
                                                             completion(result: "done")
                                                     }
@@ -122,7 +128,7 @@ class MomentsTab: UIViewController, UICollectionViewDelegate, UICollectionViewDa
         self.StoryCollection.reloadData()
     }
 
-    func albumCover(idAlbum:NSString,completion: (result: String) -> Void){
+    func albumCover(idAlbum:String,completion: (result: String) -> Void){
         if let USERID = KeychainWrapper.stringForKey("UserID"){
             //for album in self.AlbumCollection{
             Alamofire.request(.POST, "http://imageshare.io/api/v1/getalbumdetail.php", parameters: ["userId":USERID,"albumId":idAlbum]) .responseJSON { response in // 1
@@ -134,9 +140,9 @@ class MomentsTab: UIViewController, UICollectionViewDelegate, UICollectionViewDa
                             if let third = second["images"] as? NSArray{
                                 //print(third)
                                 if let fourth = third.firstObject as? NSDictionary{
-                                    if let fifth = fourth["imageLocation"] as? NSString{
+                                    if let fifth = fourth["imageLocation"] as? String{
                                         //print(fifth)
-                                        completion(result: fifth as String)
+                                        completion(result: fifth)
                                     }
                                     
                                 }else{completion(result:"nothing")}
@@ -215,7 +221,7 @@ class MomentsTab: UIViewController, UICollectionViewDelegate, UICollectionViewDa
         return 0
     }
     
-    func populateData(dataone:String,datatwo:NSString,datathree:String){
+    func populateData(dataone:String,datatwo:String,datathree:String){
         if(!self.StoryCatch.contains(datathree)){
         self.StoryCatch.append(datathree)
         self.cellData.append(CellContent(ID: dataone, PhotoURL: datatwo,ActualID: datathree))

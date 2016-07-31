@@ -15,6 +15,8 @@ class online_albums: UIViewController,UITableViewDelegate, UITableViewDataSource
     @IBOutlet weak var NavTitle: UINavigationItem!
     @IBOutlet weak var AlbumDesc: UILabel!
     @IBOutlet weak var ThePhotoTable: UITableView!
+    @IBOutlet weak var AlbumTitleBar: UINavigationItem!
+
     
     var DataPassed:String!
     var PhCollection = [PhotoDetails]()
@@ -31,13 +33,16 @@ class online_albums: UIViewController,UITableViewDelegate, UITableViewDataSource
         }
     }
     
+    var albumDescription:String!
+    var albumTitle:String!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         //self.PhCollection.removeAll()
         //self.PClass.removeAll()
         self.ThePhotoTable.delegate = self
         self.ThePhotoTable.dataSource = self
-        
+        self.AlbumTitleBar.title = self.albumTitle
         //self.albumCover(DataPassed, completion:{ _ in
           //  self.ThePhotoTable.reloadData()
         //})
@@ -49,6 +54,9 @@ class online_albums: UIViewController,UITableViewDelegate, UITableViewDataSource
         self.PClass.removeAll()
         //print(DataPassed)
         self.albumCover(DataPassed, completion:{ _ in
+        self.AlbumDesc.text = self.albumDescription
+        self.navigationItem.title = self.albumTitle
+        self.AlbumTitleBar.title = self.albumTitle
         self.ThePhotoTable.reloadData()
         //print(self.PClass)
         })
@@ -96,7 +104,11 @@ class online_albums: UIViewController,UITableViewDelegate, UITableViewDataSource
                    // print(jsn)
                     if let first = jsn as? [String:AnyObject]{
                         if let second = first["album"] as? NSDictionary{
-                            // print(second)
+                             //print(second)
+                            if let thisName = second["name"] as? String?{
+                                self.albumTitle = thisName
+                            if let thisDisc = second["desc"] as? String{
+                                self.albumDescription = thisDisc
                             if let third = second["images"] as? NSArray{
                                 if third.count == 0 {completion(result:"done")}
                                 for albumphotos in third{
@@ -125,6 +137,8 @@ class online_albums: UIViewController,UITableViewDelegate, UITableViewDataSource
                                     }
                                 }
                             }
+                            }
+                        }
                         }
                     }
                 }

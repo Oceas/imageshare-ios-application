@@ -126,7 +126,7 @@ class StoriesTab: UIViewController, UICollectionViewDelegate, UICollectionViewDa
                 if let jsn = response.result.value {
                     //print(jsn)
                     if let first = jsn as? [String:AnyObject]{
-                        print(first)
+                        //print(first)
                         if let second = first["album"] as? NSDictionary{
                              //print(second)
                             if let third = second["images"] as? NSArray{
@@ -229,7 +229,7 @@ class StoriesTab: UIViewController, UICollectionViewDelegate, UICollectionViewDa
                                                                 //print(counts)
                                                                 completion(result: "done")
                                                         }else{if counts == moments.count{
-                                                            print("Hi")
+                                                            //print("Hi")
                                                             self.populateData(Mname, datatwo:"Blank",datathree: MID,datafour:sID,datafive:thename)
                                                             completion(result:"done")}}
                                                         

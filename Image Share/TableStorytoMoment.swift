@@ -27,6 +27,9 @@ class TableStorytoMoment: UITableViewController {
         }
     }
     
+    var StoryDesc:String!
+    
+    @IBOutlet weak var STORY_DESC: UILabel!
     var cellData = [CellContent]()
     var datapassed:String?
     
@@ -47,6 +50,7 @@ class TableStorytoMoment: UITableViewController {
         self.getStoryDetail(datapassed!, completion:{ Aname in
             self.TheTable.reloadData()
             self.navigationItem.title = Aname
+            self.STORY_DESC.text = self.StoryDesc
             //print(self.cellData)
         })
     }
@@ -104,6 +108,8 @@ class TableStorytoMoment: UITableViewController {
                     if let errortyp = jsn["error"] as? Int{
                         if (errortyp == 0){
                             if let storylayer = jsn["story"] as? NSDictionary{
+                                if let storyd = storylayer["storyDesc"] as? String{
+                                    self.StoryDesc = storyd
                                 if let thename = storylayer["storyName"] as? String{
                                 if let moments = storylayer["momments"] as? NSArray{
                                     if moments.count == 0{completion(result: thename)}
@@ -141,6 +147,7 @@ class TableStorytoMoment: UITableViewController {
                                     }
                                 }else{completion(result: thename)}
                             }
+                                }
                         }
                         }
                     }

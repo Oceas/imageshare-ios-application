@@ -15,7 +15,6 @@
 		E414B2B41D414C5D00F64ED0 /* StoriesTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = E414B2B31D414C5D00F64ED0 /* StoriesTab.swift */; };
 		E414B2B61D414D0500F64ED0 /* MomentsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E414B2B51D414D0500F64ED0 /* MomentsCell.swift */; };
 		E418F2D91D0614DF00E84CB2 /* AccountInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = E418F2D81D0614DF00E84CB2 /* AccountInfo.swift */; };
-		E41986DF1D19D5C400D78E46 /* user-512.png in Resources */ = {isa = PBXBuildFile; fileRef = E41986DE1D19D5C400D78E46 /* user-512.png */; };
 		E4248A591D01E13E000FE19A /* ForgotPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4248A581D01E13E000FE19A /* ForgotPass.swift */; };
 		E4248A5B1D01E16C000FE19A /* Register.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4248A5A1D01E16C000FE19A /* Register.swift */; };
 		E4286DD81D36C998003CA8AC /* CellManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4286DD71D36C998003CA8AC /* CellManager.swift */; };
@@ -65,7 +64,6 @@
 		E414B2B31D414C5D00F64ED0 /* StoriesTab.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoriesTab.swift; sourceTree = "<group>"; };
 		E414B2B51D414D0500F64ED0 /* MomentsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MomentsCell.swift; sourceTree = "<group>"; };
 		E418F2D81D0614DF00E84CB2 /* AccountInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountInfo.swift; sourceTree = "<group>"; };
-		E41986DE1D19D5C400D78E46 /* user-512.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "user-512.png"; sourceTree = "<group>"; };
 		E4248A581D01E13E000FE19A /* ForgotPass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ForgotPass.swift; sourceTree = "<group>"; };
 		E4248A5A1D01E16C000FE19A /* Register.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Register.swift; sourceTree = "<group>"; };
 		E4286DD71D36C998003CA8AC /* CellManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CellManager.swift; sourceTree = "<group>"; };
@@ -168,7 +166,6 @@
 			children = (
 				E4FDC8D91CF804260088E49C /* AppDelegate.swift */,
 				E4FDC8E31CF804260088E49C /* Assets.xcassets */,
-				E41986DE1D19D5C400D78E46 /* user-512.png */,
 				E4E006AA1CF8B02100E351C8 /* Amatic-Bold.ttf */,
 				E4E006AB1CF8B02100E351C8 /* AmaticSC-Regular.ttf */,
 				E4E006AC1CF8B02100E351C8 /* SIL Open Font License.txt */,
@@ -278,7 +275,6 @@
 				E4E006AD1CF8B02100E351C8 /* Amatic-Bold.ttf in Resources */,
 				E4E6FA801D18C42D0018E3A2 /* Main.storyboard in Resources */,
 				E4E006AF1CF8B02100E351C8 /* SIL Open Font License.txt in Resources */,
-				E41986DF1D19D5C400D78E46 /* user-512.png in Resources */,
 				E4FDC8E41CF804260088E49C /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
