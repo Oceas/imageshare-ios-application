@@ -14,9 +14,7 @@ import Kingfisher
 
 class SlideshowView: UIViewController {
 
-    @IBOutlet weak var NavBar: UINavigationBar!
     @IBOutlet weak var bottombar: UIToolbar!
-    @IBOutlet weak var PhotoTitle: UINavigationItem!
     @IBOutlet weak var Trashbtn: UIBarButtonItem!
     @IBOutlet weak var DisplayIMG: UIImageView!
     @IBOutlet weak var PhotoComments: UITextView!
@@ -57,7 +55,7 @@ class SlideshowView: UIViewController {
         
         openDict({ _ in
             //print(self.PhotoDetails)
-            self.PhotoTitle.title = self.PhotoDetails[self.i].getName()
+            self.navigationItem.title = self.PhotoDetails[self.i].getName()
             var address = [String]()
             //let PURL = NSURL(string: self.PhotoDetails[self.i].getURL())!
             //self.DisplayIMG.hnk_setImageFromURL(PURL, format: Format<UIImage>(name: "original"))
@@ -166,7 +164,7 @@ class SlideshowView: UIViewController {
         self.DisplayIMG.nk_cancelLoading()
         self.setImageWith(ImageRequest(URL: NURL))
         */
-        self.PhotoTitle.title = self.PhotoDetails[self.i].getName()
+        self.navigationItem.title = self.PhotoDetails[self.i].getName()
         self.PhotoComments.text = self.PhotoDetails[self.i].getDesc()
     }
     
@@ -217,20 +215,20 @@ class SlideshowView: UIViewController {
     }
     
     func stopSlide(){
-        self.NavBar.hidden = false
+        self.navigationController?.navigationBar.hidden = false
         self.PhotoComments.hidden = false
         self.bottombar.hidden = false
     }
     
     func slideshow(){
-        self.NavBar.hidden = true
+        self.navigationController?.navigationBar.hidden = true
         self.PhotoComments.hidden = true
         self.bottombar.hidden = true
         self.timer = NSTimer.scheduledTimerWithTimeInterval(3, target: self, selector: #selector(SlideshowView.Swipe_Right), userInfo: nil, repeats: true)
     }
     
     func togglehide(){
-        self.NavBar.hidden = !self.NavBar.hidden.boolValue
+        self.navigationController?.navigationBar.hidden = !(self.navigationController?.navigationBar.hidden.boolValue)!
         self.PhotoComments.hidden = !self.PhotoComments.hidden.boolValue
         self.bottombar.hidden = !self.bottombar.hidden.boolValue
     }

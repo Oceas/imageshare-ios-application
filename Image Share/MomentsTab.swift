@@ -194,8 +194,9 @@ class MomentsTab: UIViewController, UICollectionViewDelegate, UICollectionViewDa
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         if (segue.identifier == "PhotoAlbum") {
-            let svc = segue.destinationViewController as! online_albums
-            svc.DataPassed = sender as! String
+            let svc = segue.destinationViewController as! UINavigationController
+            let detailController = svc.topViewController as! online_albums
+            detailController.DataPassed = sender as! String
         }
     }
     

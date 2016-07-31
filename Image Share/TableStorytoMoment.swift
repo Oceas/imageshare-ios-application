@@ -38,6 +38,9 @@ class TableStorytoMoment: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.navigationBar.translucent = false
+        self.navigationController?.navigationBar.barTintColor = UIColor(red: 0.0/255.0, green:180/255.0, blue:220/255.0, alpha: 1.0)
+        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Home", style: .Plain, target: self, action: #selector(TableStorytoMoment.sendmeback(_:)))
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(TableStorytoMoment.editstory(_:)))
     }
@@ -214,6 +217,11 @@ class TableStorytoMoment: UITableViewController {
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         if (segue.identifier == "toAlbum") {
+            /*
+            let svc = segue.destinationViewController as! UINavigationController
+            let detailController = svc.topViewController as! online_albums
+            detailController.DataPassed = sender as! String
+ */
             let svc = segue.destinationViewController as! online_albums
             svc.DataPassed = sender as! String
         }

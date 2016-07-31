@@ -10,6 +10,8 @@ import UIKit
 import Photos
 import CoreData
 import CoreImage
+import BTNavigationDropdownMenu
+import LocalAuthentication
 
 
 
@@ -37,16 +39,44 @@ class TableViewTableViewController: UIViewController, UITableViewDelegate, UITab
         }
     }
 
+    var menuView:BTNavigationDropdownMenu!
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem()
-        self.navigationItem.title = "Albums"
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Home", style: .Plain, target: self, action: #selector(TableViewTableViewController.gohome(_:)))
+        let items = ["Home", "Upload", "Account Info", "LogOut"]
+        self.navigationController?.navigationBar.translucent = false
+        self.navigationController?.navigationBar.barTintColor = UIColor(red: 0.0/255.0, green:180/255.0, blue:220/255.0, alpha: 1.0)
+        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
+        
+        menuView = BTNavigationDropdownMenu(navigationController: self.navigationController, title: items[1], items: items)
+        menuView.cellHeight = 50
+        menuView.cellBackgroundColor = self.navigationController?.navigationBar.barTintColor
+        menuView.cellSelectionColor = UIColor(red: 0.0/255.0, green:160.0/255.0, blue:195.0/255.0, alpha: 1.0)
+        menuView.keepSelectedCellColor = true
+        menuView.cellTextLabelColor = UIColor.whiteColor()
+        menuView.cellTextLabelFont = UIFont(name: "Avenir-Heavy", size: 17)
+        menuView.cellTextLabelAlignment = .Left // .Center // .Right // .Left
+        menuView.arrowPadding = 15
+        menuView.animationDuration = 0.5
+        menuView.maskBackgroundColor = UIColor.blackColor()
+        menuView.maskBackgroundOpacity = 0.3
+        menuView.didSelectItemAtIndexHandler = {(indexPath: Int) -> () in
+            switch indexPath {
+            case 0:
+                self.gohome()
+            case 1:
+                return
+            case 2:
+                self.accountInfo()
+            case 3:
+                self.loggingout()
+            default:
+                return
+            }
+        }
+        self.navigationItem.titleView = menuView
+        //self.navigationItem.title = "Albums"
+        //self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Home", style: .Plain, target: self, action: #selector(TableViewTableViewController.gohome(_:)))
         Table.delegate = self
         Table.dataSource = self
         //Table.rowHeight = UITableViewAutomaticDimension
@@ -57,6 +87,21 @@ class TableViewTableViewController: UIViewController, UITableViewDelegate, UITab
     override func viewDidAppear(animated: Bool) {
                 Table.reloadData()
         
+    }
+    
+    func accountInfo(){
+        self.performSegueWithIdentifier("account_info", sender: self)
+    }
+    
+    func loggingout(){
+        self.clearLoggedinFlagInUserDefaults()
+        self.performSegueWithIdentifier("log_outs", sender: self)
+    }
+    
+    func clearLoggedinFlagInUserDefaults() {
+        let defaults = NSUserDefaults.standardUserDefaults()
+        defaults.removeObjectForKey("userLoggedIn")
+        defaults.synchronize()
     }
     
     override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
@@ -199,8 +244,8 @@ class TableViewTableViewController: UIViewController, UITableViewDelegate, UITab
         // Pass the selected object to the new view controller.
     }
     */
-    func gohome(sender:UIBarButtonItem){
-        performSegueWithIdentifier("goinghome", sender: sender)
+    func gohome(){
+        performSegueWithIdentifier("goinghome", sender: self)
     }
 
 }

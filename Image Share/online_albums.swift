@@ -12,11 +12,8 @@ import Haneke
 import Kingfisher
 
 class online_albums: UIViewController,UITableViewDelegate, UITableViewDataSource {
-    @IBOutlet weak var NavTitle: UINavigationItem!
     @IBOutlet weak var AlbumDesc: UILabel!
     @IBOutlet weak var ThePhotoTable: UITableView!
-    @IBOutlet weak var AlbumTitleBar: UINavigationItem!
-
     
     var DataPassed:String!
     var PhCollection = [PhotoDetails]()
@@ -42,23 +39,21 @@ class online_albums: UIViewController,UITableViewDelegate, UITableViewDataSource
         //self.PClass.removeAll()
         self.ThePhotoTable.delegate = self
         self.ThePhotoTable.dataSource = self
-        self.AlbumTitleBar.title = self.albumTitle
-        //self.albumCover(DataPassed, completion:{ _ in
-          //  self.ThePhotoTable.reloadData()
-        //})
+        self.navigationController?.navigationBar.translucent = false
+        self.navigationController?.navigationBar.barTintColor = UIColor(red: 0.0/255.0, green:180/255.0, blue:220/255.0, alpha: 1.0)
+        self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Home", style: .Plain, target: self, action: #selector(online_albums.returntomain(_:)))
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(true)
         self.PhCollection.removeAll()
         self.PClass.removeAll()
-        //print(DataPassed)
+
         self.albumCover(DataPassed, completion:{ _ in
         self.AlbumDesc.text = self.albumDescription
         self.navigationItem.title = self.albumTitle
-        self.AlbumTitleBar.title = self.albumTitle
         self.ThePhotoTable.reloadData()
-        //print(self.PClass)
         })
     }
     
@@ -76,7 +71,6 @@ class online_albums: UIViewController,UITableViewDelegate, UITableViewDataSource
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
@@ -159,6 +153,10 @@ class online_albums: UIViewController,UITableViewDelegate, UITableViewDataSource
             let svc = segue.destinationViewController as! SlideshowView
             svc.PhotoPassed = PhotoDict
         }
+    }
+    
+    func returntomain(sender:UIBarButtonItem){
+        self.performSegueWithIdentifier("LETSGOHOME", sender: sender)
     }
 
     
