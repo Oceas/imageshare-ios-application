@@ -70,14 +70,14 @@ class TableStorytoMoment: UITableViewController {
         return self.cellData.count
     }
     
-    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-        let orientation: UIInterfaceOrientationMask = [UIInterfaceOrientationMask.Portrait, UIInterfaceOrientationMask.Portrait]
-        return orientation
+    override func shouldAutorotate() -> Bool {
+        return false
     }
     
-    override func shouldAutorotate() -> Bool {
-        return true
+    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+        return UIInterfaceOrientationMask.Portrait
     }
+
     
     func sendmeback(sender:UIBarButtonItem){
         self.performSegueWithIdentifier("Sentback", sender: sender)
@@ -290,3 +290,5 @@ class TableStorytoMoment: UITableViewController {
     */
 
 }
+
+

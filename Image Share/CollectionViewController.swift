@@ -159,13 +159,12 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
         //self.Collection.reloadData()
     }
 
-    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-        let orientation: UIInterfaceOrientationMask = [UIInterfaceOrientationMask.Portrait, UIInterfaceOrientationMask.Portrait]
-        return orientation
+    override func shouldAutorotate() -> Bool {
+        return false
     }
     
-    override func shouldAutorotate() -> Bool {
-        return true
+    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+        return UIInterfaceOrientationMask.Portrait
     }
     
 
@@ -268,3 +267,4 @@ class CollectionViewController: UIViewController, UICollectionViewDelegate, UICo
     }
 
 }
+

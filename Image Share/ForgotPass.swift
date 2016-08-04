@@ -40,6 +40,14 @@ class ForgotPass: UIViewController {
             self.presentViewController(alert, animated: true, completion: nil)
         }
     }
+    
+    override func shouldAutorotate() -> Bool {
+        return false
+    }
+    
+    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+        return UIInterfaceOrientationMask.Portrait
+    }
 
 
 }

@@ -40,6 +40,7 @@ class MomentsTab: UIViewController, UICollectionViewDelegate, UICollectionViewDa
         }
     }
     
+    
 
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(true)
@@ -51,14 +52,14 @@ class MomentsTab: UIViewController, UICollectionViewDelegate, UICollectionViewDa
         defaults.synchronize()
     }
     
-    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-        let orientation: UIInterfaceOrientationMask = [UIInterfaceOrientationMask.Portrait, UIInterfaceOrientationMask.Portrait]
-        return orientation
+    override func shouldAutorotate() -> Bool {
+        return false
     }
     
-    override func shouldAutorotate() -> Bool {
-        return true
+    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+        return UIInterfaceOrientationMask.Portrait
     }
+
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.cellData.count

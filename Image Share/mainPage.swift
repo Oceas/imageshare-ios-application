@@ -78,6 +78,13 @@ class mainPage: UIViewController{
         self.currentViewController?.reloadInputViews()
     }
     
+    override func shouldAutorotate() -> Bool {
+        return false
+    }
+    
+    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+        return UIInterfaceOrientationMask.Portrait
+    }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(true)
@@ -125,14 +132,6 @@ class mainPage: UIViewController{
         defaults.synchronize()
     }
     
-    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-        let orientation: UIInterfaceOrientationMask = [UIInterfaceOrientationMask.Portrait, UIInterfaceOrientationMask.Portrait]
-        return orientation
-    }
-    
-    override func shouldAutorotate() -> Bool {
-        return true
-    }
     
     func cycleFromViewController(oldViewController: UIViewController, toViewController newViewController: UIViewController) {
         oldViewController.willMoveToParentViewController(nil)
@@ -164,6 +163,7 @@ class mainPage: UIViewController{
         parentView.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[subView]|",
             options: [], metrics: nil, views: viewBindingsDict))
     }
+    
 
     func UserInformation(completion: (nUser: String) -> Void){
         if let userID = KeychainWrapper.stringForKey("UserID"){
@@ -187,4 +187,5 @@ class mainPage: UIViewController{
         }
     }
 }
+
 
